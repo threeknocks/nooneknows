@@ -2,1191 +2,764 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>13</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NO ONE KNOWS</title>
 
 <style>
-*{box-sizing:border-box}
-
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    color:#8b0000;
-    font-family:monospace;
-    cursor:crosshair;
+* {
+    box-sizing: border-box;
 }
 
-/* ENTER SCREEN */
-
-#enter{
-    position:fixed;
-    inset:0;
-    z-index:9999;
-    background:#000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    cursor:pointer;
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #ddd;
+    font-family: "Courier New", monospace;
+    overflow: hidden;
 }
 
-#enterText{
-    color:#650000;
-    font-size:12px;
-    letter-spacing:8px;
-    animation:pulse 2s infinite;
+body {
+    position: relative;
 }
 
-@keyframes pulse{
-    0%,100%{opacity:.25}
-    50%{opacity:1}
-}
-
-#enterSub{
-    margin-top:18px;
-    color:#260000;
-    font-size:8px;
-    letter-spacing:3px;
-}
-
-/* FALLING NUMBERS */
-
-#numbers{
-    position:fixed;
-    inset:0;
-    z-index:2;
-    overflow:hidden;
-    pointer-events:none;
-}
-
-.number{
-    position:absolute;
-    top:-40px;
-    color:#470000;
-    opacity:.65;
-    font-size:11px;
-    animation:fall linear forwards;
-}
-
-@keyframes fall{
-    from{transform:translateY(-50px)}
-    to{transform:translateY(110vh)}
-}
-
-/* MAIN */
-
-#main{
-    position:fixed;
-    inset:0;
-    z-index:10;
-    background:#000;
-    overflow:hidden;
-}
-
-#monster{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:0;
-    filter:
-        grayscale(1)
-        contrast(2)
-        brightness(.25);
-    transition:opacity .08s;
-}
-
-/* RED VIGNETTE */
-
-#red{
-    position:fixed;
-    inset:0;
-    z-index:20;
-    pointer-events:none;
-    background:
-        radial-gradient(
-            circle,
-            transparent 25%,
-            rgba(80,0,0,.12) 60%,
-            rgba(120,0,0,.5) 100%
-        );
-}
-
-/* SCANLINES */
-
-#scanlines{
-    position:fixed;
-    inset:0;
-    z-index:30;
-    pointer-events:none;
+/* CRT SCANLINES */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
     background:
         repeating-linear-gradient(
             0deg,
-            rgba(255,0,0,.025) 0px,
-            rgba(255,0,0,.025) 1px,
-            transparent 1px,
+            rgba(255,255,255,0.025) 0px,
+            rgba(255,255,255,0.025) 1px,
+            transparent 2px,
             transparent 5px
         );
 }
 
-/* NOISE */
-
-#noise{
-    position:fixed;
-    inset:-50%;
-    z-index:31;
-    pointer-events:none;
-    opacity:.06;
+/* SCREEN NOISE */
+.noise {
+    position: fixed;
+    inset: -100%;
+    pointer-events: none;
+    z-index: 49;
+    opacity: 0.07;
     background-image:
         repeating-radial-gradient(
-            circle,
-            white 0,
-            white 1px,
+            circle at 20% 30%,
+            #fff 0,
+            #fff 1px,
             transparent 1px,
-            transparent 4px
+            transparent 3px
         );
-    animation:noise .08s steps(2) infinite;
+    animation: noise 0.18s steps(2) infinite;
 }
 
-@keyframes noise{
-    0%{transform:translate(0,0)}
-    25%{transform:translate(4px,-3px)}
-    50%{transform:translate(-4px,3px)}
-    75%{transform:translate(2px,4px)}
-    100%{transform:translate(0,0)}
+@keyframes noise {
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(3%, -2%); }
+    50%  { transform: translate(-2%, 3%); }
+    75%  { transform: translate(2%, 2%); }
+    100% { transform: translate(-3%, -3%); }
 }
 
-/* TEXT */
-
-#message{
-    position:fixed;
-    z-index:100;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    color:#b00000;
-    font-size:clamp(14px,4vw,32px);
-    letter-spacing:7px;
-    text-align:center;
-    opacity:0;
-    pointer-events:none;
-    text-shadow:
-        0 0 10px #700000,
-        0 0 25px #300000;
+/* MAIN SCREEN */
+.screen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background:
+        radial-gradient(
+            ellipse at center,
+            #111 0%,
+            #050505 45%,
+            #000 100%
+        );
 }
 
-/* BLOOD */
-
-#blood{
-    position:fixed;
-    inset:0;
-    z-index:200;
-    pointer-events:none;
+/* CREEPY CAT */
+.cat {
+    position: absolute;
+    width: 260px;
+    height: 340px;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.16;
+    filter: blur(1px);
 }
 
-.drip{
-    position:absolute;
-    top:-10px;
-    width:3px;
-    background:linear-gradient(#8d0000,#260000);
-    border-radius:0 0 8px 8px;
-    box-shadow:0 0 8px #350000;
-    animation:drip linear forwards;
+.head {
+    position: absolute;
+    width: 190px;
+    height: 210px;
+    left: 35px;
+    top: 65px;
+    background: #ddd;
+    border-radius: 48% 48% 45% 45%;
 }
 
-@keyframes drip{
-    from{
-        height:0;
-        top:-10px;
+/* ears */
+.ear-left,
+.ear-right {
+    position: absolute;
+    top: 20px;
+    width: 90px;
+    height: 120px;
+    background: #ddd;
+}
+
+.ear-left {
+    left: 30px;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+.ear-right {
+    right: 30px;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+/* eyes */
+.eye {
+    position: absolute;
+    top: 135px;
+    width: 23px;
+    height: 48px;
+    background: #000;
+    border-radius: 50%;
+}
+
+.eye-left {
+    left: 78px;
+}
+
+.eye-right {
+    right: 78px;
+}
+
+.eye::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 30px;
+    background: #777;
+    left: 9px;
+    top: 9px;
+}
+
+/* mouth */
+.mouth {
+    position: absolute;
+    width: 65px;
+    height: 35px;
+    left: 62px;
+    top: 195px;
+    border-bottom: 4px solid #000;
+    border-radius: 0 0 50% 50%;
+}
+
+/* HAT */
+.hat {
+    position: absolute;
+    width: 100px;
+    height: 125px;
+    background: #ddd;
+    left: 80px;
+    top: -35px;
+    transform: rotate(-5deg);
+    z-index: 3;
+}
+
+.hat::before {
+    content: "";
+    position: absolute;
+    width: 145px;
+    height: 25px;
+    background: #ddd;
+    left: -22px;
+    bottom: -10px;
+}
+
+.hat::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 25px;
+    background: #800000;
+    top: 55px;
+}
+
+/* TERMINAL */
+.terminal {
+    width: min(800px, 88vw);
+    min-height: 520px;
+    padding: 40px;
+    border: 1px solid #222;
+    background: rgba(0,0,0,0.88);
+    box-shadow:
+        0 0 50px #000,
+        inset 0 0 80px rgba(255,255,255,0.015);
+    position: relative;
+    z-index: 5;
+}
+
+.header {
+    color: #555;
+    font-size: 12px;
+    margin-bottom: 35px;
+}
+
+.line {
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+.red {
+    color: #8b0000;
+}
+
+.title {
+    text-align: center;
+    font-size: clamp(32px, 7vw, 75px);
+    letter-spacing: 8px;
+    margin: 45px 0;
+    color: #ddd;
+}
+
+.message {
+    min-height: 80px;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.cursor {
+    display: inline-block;
+    width: 9px;
+    height: 18px;
+    background: #aaa;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
     }
-    to{
-        top:0;
-        height:var(--height);
-    }
 }
 
-/* LOCATION */
-
-#locationBox{
-    position:fixed;
-    z-index:500;
-    left:50%;
-    bottom:20px;
-    transform:translateX(-50%);
-    text-align:center;
-    opacity:0;
-    transition:opacity 1s;
+/* BUTTONS */
+.buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-#locationButton{
-    background:#000;
-    border:1px solid #420000;
-    color:#650000;
-    padding:9px 15px;
-    font-family:monospace;
-    font-size:9px;
-    letter-spacing:3px;
-    cursor:pointer;
+button {
+    background: #050505;
+    color: #888;
+    border: 1px solid #444;
+    padding: 12px 18px;
+    font-family: "Courier New", monospace;
+    cursor: pointer;
 }
 
-#locationButton:hover{
-    border-color:#b00000;
-    color:#b00000;
-}
-
-#coordinates{
-    margin-top:8px;
-    color:#4d0000;
-    font-size:8px;
-    line-height:16px;
-}
-
-/* FLASH */
-
-#flash{
-    position:fixed;
-    inset:0;
-    z-index:2000;
-    background:#fff;
-    opacity:0;
-    pointer-events:none;
-}
-
-/* JUMPSCARE */
-
-#jumpscare{
-    position:fixed;
-    inset:0;
-    z-index:1000;
-    background:#000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-}
-
-#jumpImage{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    filter:
-        grayscale(1)
-        contrast(3)
-        brightness(.6);
+button:hover {
+    color: white;
+    border-color: #aaa;
 }
 
 /* GLITCH */
-
-.glitch{
-    animation:glitch .07s steps(2) infinite;
+.glitch {
+    animation: glitch 0.12s steps(2) 6;
 }
 
-@keyframes glitch{
-    0%{
-        transform:translate(0);
-        filter:none;
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+        filter: none;
     }
-    20%{
-        transform:translate(-10px,3px);
-        filter:invert(.6);
+
+    20% {
+        transform: translate(-12px, 4px);
+        filter: contrast(2);
     }
-    40%{
-        transform:translate(8px,-4px);
-        filter:contrast(4);
+
+    40% {
+        transform: translate(10px, -3px);
+        filter: invert(1);
     }
-    60%{
-        transform:translate(-4px,5px);
+
+    60% {
+        transform: translate(-7px, 2px);
+        filter: contrast(3);
     }
-    80%{
-        transform:translate(6px,-2px);
-        filter:invert(.4);
+
+    80% {
+        transform: translate(5px, -2px);
     }
-    100%{
-        transform:translate(0);
+
+    100% {
+        transform: translate(0);
     }
 }
 
-/* FINAL */
-
-#final{
-    position:fixed;
-    inset:0;
-    z-index:3000;
-    background:#000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
+/* FLASH */
+.flash {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
 }
 
-#finalText{
-    color:#900000;
-    font-size:clamp(18px,5vw,42px);
-    letter-spacing:8px;
+/* RED FLASH */
+.redFlash {
+    position: fixed;
+    inset: 0;
+    background: #700000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 99;
 }
 
-#finalCoordinates{
-    margin-top:20px;
-    color:#380000;
-    font-size:8px;
+/* HIDDEN MESSAGE */
+.secret {
+    color: #333;
+    font-size: 11px;
+    margin-top: 25px;
 }
 
-/* YOUTUBE PLAYER */
-
-#player{
-    position:fixed;
-    width:1px;
-    height:1px;
-    left:-100px;
-    top:-100px;
-    opacity:0;
-    pointer-events:none;
+.warning {
+    color: #4d0000;
+    font-size: 11px;
+    margin-top: 30px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<!-- ENTER -->
+<div class="noise"></div>
+<div class="flash" id="flash"></div>
+<div class="redFlash" id="redFlash"></div>
 
-<div id="enter">
-    <div id="enterText">ENTER</div>
-    <div id="enterSub">TURN YOUR SOUND ON</div>
-</div>
+<div class="screen">
 
-<!-- HIDDEN YOUTUBE PLAYER -->
-
-<div id="player"></div>
-
-<!-- FALLING NUMBERS -->
-
-<div id="numbers"></div>
-
-<!-- MAIN -->
-
-<div id="main">
-    <img id="monster" src="cat1.jpeg" alt="">
-</div>
-
-<div id="red"></div>
-<div id="scanlines"></div>
-<div id="noise"></div>
-
-<div id="message"></div>
-
-<div id="blood"></div>
-
-<!-- LOCATION -->
-
-<div id="locationBox">
-
-    <button id="locationButton">
-        FIND ME
-    </button>
-
-    <div id="coordinates"></div>
-
-</div>
-
-<!-- FLASH -->
-
-<div id="flash"></div>
-
-<!-- JUMPSCARE -->
-
-<div id="jumpscare">
-
-    <img
-        id="jumpImage"
-        src="cat2.jpeg"
-        alt=""
-    >
-
-</div>
-
-<!-- FINAL -->
-
-<div id="final">
-
-    <div id="finalText">
-        I SEE YOU
+    <div class="cat">
+        <div class="hat"></div>
+        <div class="ear-left"></div>
+        <div class="ear-right"></div>
+        <div class="head"></div>
+        <div class="eye eye-left"></div>
+        <div class="eye eye-right"></div>
+        <div class="mouth"></div>
     </div>
 
-    <div id="finalCoordinates"></div>
+    <div class="terminal" id="terminal">
+
+        <div class="header">
+            ARCHIVE NODE: UNKNOWN<br>
+            CONNECTION: UNSTABLE<br>
+            TIME: <span id="time"></span>
+        </div>
+
+        <div class="line">
+            &gt; initializing...
+        </div>
+
+        <div class="line">
+            &gt; checking archive integrity...
+        </div>
+
+        <div class="line red">
+            &gt; WARNING: UNKNOWN PRESENCE DETECTED
+        </div>
+
+        <div class="title" id="title">
+            NO ONE KNOWS
+        </div>
+
+        <div class="message" id="message">
+        </div>
+
+        <span class="cursor"></span>
+
+        <div class="buttons">
+
+            <button onclick="startRecord()">
+                OPEN RECORD
+            </button>
+
+            <button onclick="startAudio()">
+                LISTEN
+            </button>
+
+            <button onclick="nextClue()">
+                NEXT CLUE
+            </button>
+
+        </div>
+
+        <div class="secret" id="secret">
+            RECORD 00 // NOTHING WAS FOUND.
+        </div>
+
+        <div class="warning">
+            DO NOT ANSWER THE KNOCK.
+        </div>
+
+    </div>
 
 </div>
-
 
 <script>
 
-/* ==============================================
-   YOUTUBE MUSIC
-============================================== */
+/* CLOCK */
 
-let player;
+function updateTime() {
 
-function onYouTubeIframeAPIReady(){
+    const now = new Date();
 
-    player = new YT.Player(
-        "player",
-        {
-            height:"1",
-            width:"1",
-
-            videoId:"II5I4HItgzg",
-
-            playerVars:{
-                autoplay:0,
-                controls:0,
-                loop:1,
-                playlist:"II5I4HItgzg",
-                playsinline:1,
-                rel:0
-            },
-
-            events:{
-                onReady:function(){}
-            }
-        }
-    );
-}
-
-
-/* Load YouTube API */
-
-const yt =
-    document.createElement("script");
-
-yt.src =
-    "https://www.youtube.com/iframe_api";
-
-document.head.appendChild(yt);
-
-
-/* ==============================================
-   START
-============================================== */
-
-let started = false;
-
-document
-.getElementById("enter")
-.addEventListener(
-    "click",
-    startExperience
-);
-
-function startExperience(){
-
-    if(started) return;
-
-    started = true;
-
-    const enter =
-        document.getElementById("enter");
-
-    enter.style.transition =
-        "opacity .8s";
-
-    enter.style.opacity =
-        "0";
-
-    setTimeout(
-        () => {
-            enter.remove();
-        },
-        900
-    );
-
-
-    /* music */
-
-    setTimeout(
-        () => {
-
-            if(player){
-                player.playVideo();
-            }
-
-        },
-        500
-    );
-
-
-    /* begin horror */
-
-    setInterval(
-        progress,
-        1000
-    );
-
-
-    /* show location later */
-
-    setTimeout(
-        () => {
-
-            document
-            .getElementById("locationBox")
-            .style.opacity = "1";
-
-        },
-        18000
-    );
+    document.getElementById("time").textContent =
+        now.toLocaleTimeString();
 
 }
 
-
-/* ==============================================
-   NUMBERS
-============================================== */
-
-const numbers =
-    document.getElementById("numbers");
-
-function createNumber(){
-
-    const n =
-        document.createElement("div");
-
-    n.className =
-        "number";
-
-    const chars =
-        "0135792468";
-
-    let text = "";
-
-    for(
-        let i=0;
-        i<Math.floor(
-            Math.random()*8
-        )+3;
-        i++
-    ){
-
-        text +=
-            chars[
-                Math.floor(
-                    Math.random()*
-                    chars.length
-                )
-            ];
-
-    }
-
-    n.textContent =
-        text;
-
-    n.style.left =
-        Math.random()*100+"%";
-
-    n.style.animationDuration =
-        Math.random()*7+4+"s";
-
-    numbers.appendChild(n);
-
-    setTimeout(
-        ()=>n.remove(),
-        13000
-    );
-
-}
-
-setInterval(
-    createNumber,
-    140
-);
+setInterval(updateTime, 1000);
+updateTime();
 
 
-/* ==============================================
-   TEXT
-============================================== */
-
-const message =
-    document.getElementById("message");
+/* ARG MESSAGES */
 
 const messages = [
 
-    "13",
-    "LOOK",
-    "NO",
-    "HE KNOWS",
-    "STOP",
-    "RUN",
-    "BEHIND YOU",
-    "I SEE YOU",
-    "13",
-    "13",
-    "DON'T LOOK"
+    "someone opened this archive before you.",
+
+    "the first photograph has been deleted.",
+
+    "the Cat was not supposed to appear here.",
+
+    "three knocks were recorded at 03:17.",
+
+    "nobody remembers opening the door.",
+
+    "the person who found this page disappeared.",
+
+    "there is something standing behind the camera.",
+
+    "the hat moved between photographs.",
+
+    "you were not supposed to reach record 08.",
+
+    "DO NOT LOOK BEHIND YOU."
 
 ];
 
-function showMessage(text){
+let record = 0;
 
-    message.textContent =
-        text ||
-        messages[
-            Math.floor(
-                Math.random()*
-                messages.length
-            )
-        ];
+function typeText(text) {
 
-    message.style.opacity =
-        "1";
+    const box = document.getElementById("message");
 
-    setTimeout(
-        ()=>{
-            message.style.opacity="0";
-        },
-        250+Math.random()*600
-    );
+    box.textContent = "";
+
+    let i = 0;
+
+    const timer = setInterval(() => {
+
+        box.textContent += text[i];
+
+        i++;
+
+        if (i >= text.length) {
+            clearInterval(timer);
+        }
+
+    }, 40);
 
 }
 
 
-/* ==============================================
-   BLOOD
-============================================== */
+function startRecord() {
 
-function blood(){
+    record++;
 
-    const container =
-        document.getElementById("blood");
+    if (record >= messages.length) {
+        record = 0;
+    }
 
-    for(
-        let i=0;
-        i<Math.floor(Math.random()*12)+8;
-        i++
-    ){
+    typeText(messages[record]);
 
-        const d =
-            document.createElement("div");
+    document.getElementById("secret").textContent =
+        "RECORD " +
+        String(record).padStart(2,"0") +
+        " // ARCHIVE CORRUPTED";
 
-        d.className =
-            "drip";
-
-        d.style.left =
-            Math.random()*100+"%";
-
-        d.style.setProperty(
-            "--height",
-            Math.random()*180+30+"px"
-        );
-
-        d.style.animationDuration =
-            Math.random()*1.5+.5+"s";
-
-        container.appendChild(d);
-
-        setTimeout(
-            ()=>d.remove(),
-            3500
-        );
-
+    if (record === 3 || record === 7 || record === 9) {
+        glitch();
     }
 
 }
 
 
-/* ==============================================
-   FLASH
-============================================== */
+/* CLUES */
 
-function flashScreen(){
+const clues = [
+
+    "CLUE 01 // THE CLOCK STOPPED AT 03:17.",
+
+    "CLUE 02 // FOUR FINGERPRINTS. NO HANDPRINT.",
+
+    "CLUE 03 // THE HAT WAS FOUND FACING THE WALL.",
+
+    "CLUE 04 // SOMEONE WROTE: HE IS NOT IN THE PICTURE.",
+
+    "CLUE 05 // THE DOOR WAS LOCKED FROM THE INSIDE.",
+
+    "CLUE 06 // THERE WAS A SECOND SHADOW.",
+
+    "CLUE 07 // THE CAT KNOWS YOUR NAME.",
+
+    "CLUE 08 // DON'T MAKE HIM LAUGH."
+
+];
+
+let clue = 0;
+
+function nextClue() {
+
+    clue++;
+
+    if (clue >= clues.length) {
+        clue = 0;
+    }
+
+    document.getElementById("secret").textContent =
+        clues[clue];
+
+    if (clue === 6 || clue === 7) {
+        glitch();
+    }
+
+}
+
+
+/* SCREEN GLITCH */
+
+function glitch() {
+
+    const terminal =
+        document.getElementById("terminal");
+
+    terminal.classList.add("glitch");
+
+    setTimeout(() => {
+
+        terminal.classList.remove("glitch");
+
+    }, 900);
+
+}
+
+
+/* CONTROLLED FLASH */
+
+function flashScreen() {
 
     const flash =
         document.getElementById("flash");
 
-    flash.style.opacity=".9";
+    flash.style.opacity = "0.85";
 
-    setTimeout(
-        ()=>{
-            flash.style.opacity="0";
-        },
-        35
-    );
+    setTimeout(() => {
+        flash.style.opacity = "0";
+    }, 80);
 
 }
 
 
-/* ==============================================
-   GLITCH
-============================================== */
+/* RED FLASH */
 
-function glitch(duration=400){
+function redFlashScreen() {
 
-    const main =
-        document.getElementById("main");
+    const flash =
+        document.getElementById("redFlash");
 
-    main.classList.add("glitch");
+    flash.style.opacity = "0.45";
 
-    setTimeout(
-        ()=>{
-            main.classList.remove("glitch");
-        },
-        duration
-    );
+    setTimeout(() => {
+        flash.style.opacity = "0";
+    }, 120);
 
 }
 
 
-/* ==============================================
-   IMAGE FLASH
-============================================== */
+/* RANDOM DISTORTION */
 
-const monster =
-    document.getElementById("monster");
+setInterval(() => {
 
-function imageFlash(
-    image,
-    time=180,
-    zoom=1.2
-){
+    if (Math.random() < 0.28) {
 
-    monster.src =
-        image;
-
-    monster.style.transform =
-        scale(${zoom});
-
-    monster.style.opacity =
-        "1";
-
-    setTimeout(
-        ()=>{
-            monster.style.opacity="0";
-        },
-        time
-    );
-
-}
-
-
-/* ==============================================
-   REAL JUMPSCARE
-============================================== */
-
-function jumpscare(){
-
-    const box =
-        document.getElementById(
-            "jumpscare"
-        );
-
-    const img =
-        document.getElementById(
-            "jumpImage"
-        );
-
-    img.style.transform =
-        "scale(1.45)";
-
-    box.style.display =
-        "flex";
-
-    flashScreen();
-
-    setTimeout(
-        ()=>{
-            box.style.display="none";
-        },
-        220
-    );
-
-}
-
-
-/* ==============================================
-   HORROR PROGRESSION
-============================================== */
-
-let inactivity = 0;
-
-function progress(){
-
-    inactivity++;
-
-
-    /* 5 seconds */
-
-    if(inactivity===5){
-
-        showMessage("13");
+        glitch();
 
     }
 
-
-    /* 9 */
-
-    if(inactivity===9){
-
-        imageFlash(
-            "cat1.jpeg",
-            250,
-            1.05
-        );
-
-    }
+}, 5000);
 
 
-    /* 14 */
+/* RANDOM FLASH */
 
-    if(inactivity===14){
+setInterval(() => {
 
-        showMessage("LOOK");
-
-        blood();
-
-    }
-
-
-    /* 20 */
-
-    if(inactivity===20){
-
-        imageFlash(
-            "cat2.jpeg",
-            130,
-            1.3
-        );
-
-        glitch(500);
-
-    }
-
-
-    /* 27 */
-
-    if(inactivity===27){
-
-        jumpscare();
-
-    }
-
-
-    /* 34 */
-
-    if(inactivity===34){
-
-        showMessage(
-            "HE KNOWS"
-        );
-
-        blood();
-
-    }
-
-
-    /* 42 */
-
-    if(inactivity===42){
-
-        imageFlash(
-            "cat2.jpeg",
-            90,
-            1.6
-        );
+    if (Math.random() < 0.10) {
 
         flashScreen();
 
-        glitch(900);
-
     }
 
+}, 7000);
 
-    /* 55 */
 
-    if(inactivity===55){
+/* AUDIO */
 
-        showMessage(
-            "I SEE YOU"
-        );
+let audioStarted = false;
+let audioContext;
+let oscillator;
+let gain;
 
-        blood();
+function startAudio() {
 
-        imageFlash(
-            "cat1.jpeg",
-            500,
-            1.4
-        );
-
+    if (audioStarted) {
+        return;
     }
 
+    audioStarted = true;
 
-    /* 70 */
+    audioContext =
+        new (window.AudioContext ||
+        window.webkitAudioContext)();
 
-    if(inactivity===70){
+    oscillator =
+        audioContext.createOscillator();
 
-        finalAttack();
+    gain =
+        audioContext.createGain();
 
-    }
+    oscillator.type = "sine";
+
+    oscillator.frequency.value = 43;
+
+    gain.gain.value = 0.025;
+
+    oscillator.connect(gain);
+
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+
+    document.querySelector(
+        ".buttons button:nth-child(2)"
+    ).textContent = "AUDIO ACTIVE";
+
+    document.querySelector(
+        ".header"
+    ).innerHTML +=
+        "<br><span class='red'>AUDIO CHANNEL OPEN</span>";
 
 }
 
 
-/* ==============================================
-   MOUSE ACTIVITY
-============================================== */
+/* IDLE BEHAVIOR */
+
+let idleTimer;
+
+function resetIdle() {
+
+    clearTimeout(idleTimer);
+
+    idleTimer = setTimeout(() => {
+
+        typeText(
+            "...you left the window open."
+        );
+
+        glitch();
+
+        setTimeout(() => {
+            redFlashScreen();
+        }, 1400);
+
+    }, 20000);
+
+}
 
 document.addEventListener(
     "mousemove",
-    ()=>{
-
-        inactivity=0;
-
-        if(
-            Math.random()<.025
-        ){
-
-            showMessage();
-
-        }
-
-    }
+    resetIdle
 );
-
 
 document.addEventListener(
-    "touchstart",
-    ()=>{
-
-        inactivity=0;
-
-    }
+    "keydown",
+    resetIdle
 );
 
-
-/* ==============================================
-   RANDOM EVENTS
-============================================== */
-
-setInterval(
-    ()=>{
-
-        if(
-            !started
-        ) return;
-
-        if(
-            Math.random()<.13
-        ){
-
-            imageFlash(
-                Math.random()<.5
-                    ?"cat1.jpeg"
-                    :"cat2.jpeg",
-                100+Math.random()*180,
-                1+Math.random()*.7
-            );
-
-        }
-
-    },
-    4300
-);
-
-
-setInterval(
-    ()=>{
-
-        if(
-            started &&
-            Math.random()<.18
-        ){
-
-            glitch(
-                100+Math.random()*500
-            );
-
-        }
-
-    },
-    3600
-);
-
-
-/* ==============================================
-   LOCATION
-============================================== */
-
-document
-.getElementById("locationButton")
-.addEventListener(
+document.addEventListener(
     "click",
-    ()=>{
-
-        const output =
-            document.getElementById(
-                "coordinates"
-            );
-
-        output.textContent =
-            "SEARCHING...";
-
-
-        if(
-            !navigator.geolocation
-        ){
-
-            output.textContent =
-                "UNAVAILABLE";
-
-            return;
-
-        }
-
-
-        navigator.geolocation
-        .getCurrentPosition(
-
-            position=>{
-
-                const lat =
-                    position.coords.latitude;
-
-                const lon =
-                    position.coords.longitude;
-
-
-                output.innerHTML =
-                    `LAT ${lat.toFixed(5)}<br>`+
-                    LON ${lon.toFixed(5)};
-
-
-                document
-                .getElementById(
-                    "finalCoordinates"
-                )
-                .textContent =
-                    ${lat.toFixed(5)} / ${lon.toFixed(5)};
-
-
-                setTimeout(
-                    ()=>{
-                        showMessage(
-                            "I SEE YOU"
-                        );
-                    },
-                    600
-                );
-
-
-                setTimeout(
-                    ()=>{
-                        blood();
-                        glitch(1000);
-                    },
-                    1200
-                );
-
-            },
-
-            ()=>{
-                output.textContent =
-                    "DENIED";
-
-                showMessage(
-                    "I KNOW"
-                );
-
-            },
-
-            {
-                enableHighAccuracy:true,
-                timeout:10000,
-                maximumAge:0
-            }
-
-        );
-
-    }
+    resetIdle
 );
 
-
-/* ==============================================
-   FINAL
-============================================== */
-
-function finalAttack(){
-
-    flashScreen();
-
-    setTimeout(
-        ()=>{
-
-            const box =
-                document.getElementById(
-                    "jumpscare"
-                );
-
-            const img =
-                document.getElementById(
-                    "jumpImage"
-                );
-
-            img.style.transform =
-                "scale(1.😎";
-
-            box.style.display =
-                "flex";
-
-            blood();
-
-            glitch(1800);
-
-        },
-        100
-    );
+resetIdle();
 
 
-    setTimeout(
-        ()=>{
+/* RANDOM TEXT CORRUPTION */
 
-            document
-            .getElementById(
-                "jumpscare"
-            )
-            .style.display =
-                "none";
+setInterval(() => {
 
-            document
-            .getElementById(
-                "final"
-            )
-            .style.display =
-                "flex";
+    const title =
+        document.getElementById("title");
 
-        },
-        1800
-    );
+    if (Math.random() < 0.08) {
 
-}
+        const original =
+            title.textContent;
 
+        title.textContent =
+            "THE CAT IS HERE";
 
-/* ==============================================
-   INITIAL NUMBERS
-============================================== */
+        setTimeout(() => {
 
-for(
-    let i=0;
-    i<50;
-    i++
-){
+            title.textContent =
+                original;
 
-    setTimeout(
-        createNumber,
-        i*70
-    );
+        }, 500);
 
-}
+    }
+
+}, 3000);
 
 </script>
 
 </body>
 </html>
+Sent 4m ago
+Compose
+Write to
+
+

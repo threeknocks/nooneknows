@@ -2,355 +2,422 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CAM 7 // HALLWAY B</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CAM_13 // DO NOT WATCH</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+*{box-sizing:border-box}
 
-* {
-    box-sizing: border-box;
-    user-select: none;
-}
-
-html,body {
+html,body{
     margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#020202;
+    background:#000;
     color:#ddd;
-    font-family:"Share Tech Mono","Courier New",monospace;
+    font-family:"Courier New",monospace;
 }
 
-body {
+body{
     cursor:crosshair;
 }
 
-/* =====================================================
-   MAIN CAMERA
-===================================================== */
+/* =========================
+   ENTER SCREEN
+========================= */
 
-#screen {
+#enter{
     position:fixed;
     inset:0;
-    background:
-        radial-gradient(
-            ellipse at 52% 45%,
-            #242424 0%,
-            #111 35%,
-            #030303 85%
-        );
-    overflow:hidden;
+    z-index:9999;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    cursor:pointer;
 }
 
-/* Fake hallway */
+#enter h1{
+    font-size:clamp(30px,7vw,75px);
+    color:#a40000;
+    letter-spacing:10px;
+    text-shadow:
+        0 0 15px red,
+        0 0 40px #500;
+    margin:0 0 25px;
+}
 
-#hallway {
+#enter p{
+    color:#888;
+    letter-spacing:4px;
+    animation:enterPulse 1.5s infinite;
+}
+
+#enter .warning{
+    color:#444;
+    font-size:10px;
+    margin-top:40px;
+    letter-spacing:2px;
+}
+
+@keyframes enterPulse{
+    50%{opacity:.2}
+}
+
+/* =========================
+   MAIN SCREEN
+========================= */
+
+#app{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            #292929 0%,
+            #111 38%,
+            #020202 85%
+        );
+}
+
+#hall{
     position:absolute;
     inset:0;
-    opacity:.8;
+
     background:
         linear-gradient(
             90deg,
-            #020202 0%,
-            #151515 20%,
-            #262626 47%,
-            #0d0d0d 70%,
-            #020202 100%
+            #000 0%,
+            #171717 18%,
+            #292929 48%,
+            #101010 72%,
+            #000 100%
         );
+
+    filter:contrast(1.2);
 }
 
-#hallway:before {
+#hall:before{
     content:"";
     position:absolute;
-    left:18%;
+    left:14%;
     top:0;
-    width:3px;
+    width:4px;
     height:100%;
-    background:#444;
+
+    background:#151515;
+
     box-shadow:
-        260px 0 #181818,
-        510px 0 #333,
-        760px 0 #111;
+        230px 0 #444,
+        470px 0 #191919,
+        720px 0 #333;
+
     opacity:.5;
 }
 
-#hallway:after {
+#hall:after{
     content:"";
+
     position:absolute;
-    width:34%;
-    height:100%;
-    left:33%;
+    left:40%;
     top:0;
+
+    width:20%;
+    height:100%;
 
     background:
         linear-gradient(
             90deg,
             transparent,
-            rgba(255,255,255,.07),
+            rgba(255,255,255,.08),
             transparent
         );
 
-    transform:skewX(-8deg);
+    transform:skewX(-9deg);
 }
 
-/* =====================================================
-   STATIC / CRT
-===================================================== */
+/* =========================
+   CRT EFFECT
+========================= */
 
-#static {
+#static{
     position:absolute;
     inset:-10%;
-    z-index:20;
+
+    z-index:30;
     pointer-events:none;
+
     opacity:.13;
 
     background-image:
         repeating-radial-gradient(
             circle at 20% 30%,
-            #fff 0px,
+            #fff 0,
             #fff 1px,
             transparent 1px,
             transparent 4px
         );
 
-    animation:noise .08s steps(2) infinite;
+    animation:noise .07s steps(2) infinite;
 }
 
-@keyframes noise {
-    0% { transform:translate(0,0); }
-    25% { transform:translate(-4px,2px); }
-    50% { transform:translate(3px,-3px); }
-    75% { transform:translate(-2px,-4px); }
-    100% { transform:translate(0,0); }
+@keyframes noise{
+    0%{
+        transform:translate(0,0);
+    }
+
+    25%{
+        transform:translate(-4px,2px);
+    }
+
+    50%{
+        transform:translate(3px,-3px);
+    }
+
+    75%{
+        transform:translate(-2px,-4px);
+    }
+
+    100%{
+        transform:translate(0,0);
+    }
 }
 
-#scanlines {
+#scan{
     position:absolute;
     inset:0;
-    z-index:21;
+
+    z-index:31;
     pointer-events:none;
 
     background:
         repeating-linear-gradient(
-            to bottom,
-            rgba(255,255,255,.035) 0px,
+            0deg,
+            rgba(255,255,255,.035) 0,
             rgba(255,255,255,.035) 1px,
             transparent 2px,
             transparent 5px
         );
 }
 
-#vignette {
+#vignette{
     position:absolute;
     inset:0;
-    z-index:22;
+
+    z-index:32;
     pointer-events:none;
 
     background:
         radial-gradient(
             ellipse at center,
-            transparent 35%,
-            rgba(0,0,0,.35) 62%,
-            rgba(0,0,0,.95) 100%
+            transparent 28%,
+            rgba(0,0,0,.45) 65%,
+            #000 100%
         );
 }
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* =========================
+   HUD
+========================= */
 
-#top {
+#hud{
     position:absolute;
-    top:18px;
-    left:25px;
-    right:25px;
-
-    height:65px;
-
-    z-index:50;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-
+    inset:0;
+    z-index:80;
     pointer-events:none;
 }
 
-.corner {
-    font-size:15px;
-    letter-spacing:1px;
-}
-
-.live {
-    color:#e00000;
-    font-size:20px;
-    margin-top:7px;
-}
-
-.liveDot {
-    display:inline-block;
-    width:12px;
-    height:12px;
-    background:#d00000;
-    border-radius:50%;
-    margin-right:7px;
-    box-shadow:0 0 12px red;
-    animation:liveBlink .8s infinite;
-}
-
-@keyframes liveBlink {
-    50% { opacity:.2; }
-}
-
-#warning {
+#live{
     position:absolute;
-    left:50%;
-    top:0;
-    transform:translateX(-50%);
+    left:22px;
+    top:20px;
 
-    border:1px solid #b00000;
-
-    color:#e00000;
-
-    padding:8px 45px;
-
-    letter-spacing:2px;
-
-    background:rgba(30,0,0,.35);
-
-    animation:warningPulse 2s infinite;
+    color:#d00000;
+    font-size:19px;
 }
 
-@keyframes warningPulse {
-    50% {
-        box-shadow:0 0 15px rgba(255,0,0,.2);
+#live i{
+    display:inline-block;
+
+    width:11px;
+    height:11px;
+
+    border-radius:50%;
+
+    background:red;
+
+    box-shadow:0 0 12px red;
+
+    margin-right:7px;
+
+    animation:blink .7s infinite;
+}
+
+@keyframes blink{
+    50%{
+        opacity:.2;
     }
 }
 
-#clock {
-    text-align:right;
-    font-size:17px;
-}
-
-#camName {
-    margin-top:7px;
-}
-
-/* =====================================================
-   SIGNAL
-===================================================== */
-
-#signalBox {
+#cam{
     position:absolute;
-    top:90px;
-    right:28px;
+    right:22px;
+    top:20px;
 
-    z-index:50;
+    text-align:right;
 
-    width:200px;
+    font-size:13px;
+    line-height:20px;
+}
 
-    border:1px solid #aaa;
+#alert{
+    position:absolute;
+
+    top:18px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    border:1px solid #8b0000;
+
+    padding:7px 24px;
+
+    color:#d00000;
+
+    background:#140000cc;
+
+    letter-spacing:2px;
+}
+
+#signal{
+    position:absolute;
+
+    right:22px;
+    top:92px;
+
+    width:185px;
+
+    border:1px solid #777;
 
     padding:9px;
 
-    background:rgba(0,0,0,.4);
-}
+    background:#0008;
 
-.signalTitle {
     text-align:center;
-    margin-bottom:8px;
+
+    font-size:11px;
 }
 
-#bars {
+.bars{
     display:flex;
-    gap:3px;
     justify-content:center;
+    gap:3px;
+    margin:8px 0;
 }
 
-.bar {
+.bars b{
     width:12px;
-    height:18px;
+    height:17px;
     background:#bbb;
 }
 
-.bar.dead {
-    background:#250000;
+.bars b.off{
+    background:#260000;
 }
 
-/* =====================================================
+/* =========================
    SYSTEM LOG
-===================================================== */
+========================= */
 
-#log {
+#log{
     position:absolute;
-    left:28px;
-    bottom:245px;
 
-    width:300px;
+    left:22px;
+    bottom:225px;
 
-    z-index:50;
+    width:310px;
 
-    font-size:12px;
+    font-size:11px;
+    line-height:18px;
 
-    line-height:20px;
-
-    text-shadow:0 0 5px #000;
+    text-shadow:0 0 4px #000;
 }
 
-.logTitle {
-    color:#ddd;
-    margin-bottom:6px;
+#logTitle{
+    color:#aaa;
+    margin-bottom:5px;
 }
 
-.logLine {
-    opacity:.8;
-}
-
-.logLine.red {
+#log .r{
     color:#d00000;
 }
 
-/* =====================================================
-   CENTER ENTITY
-===================================================== */
+/* =========================
+   DO NOT LOOK
+========================= */
 
-#entity {
+#warning{
     position:absolute;
 
-    width:280px;
-    height:430px;
+    left:22px;
+    bottom:270px;
+
+    border:1px solid #700;
+
+    padding:8px 12px;
+
+    color:#c00000;
+
+    font-size:12px;
+
+    text-align:center;
+}
+
+#warning strong{
+    display:block;
+    font-size:27px;
+    margin-top:4px;
+}
+
+/* =========================
+   CAT IN THE HAT
+========================= */
+
+#cat{
+    position:absolute;
+
+    z-index:25;
+
+    width:300px;
+    height:500px;
 
     left:58%;
     top:47%;
 
-    transform:
-        translate(-50%,-50%)
-        scale(.7);
-
     opacity:0;
 
-    z-index:18;
-
-    transition:
-        opacity .05s,
-        transform .05s;
+    transform:
+        translate(-50%,-50%)
+        scale(.65);
 
     filter:
-        drop-shadow(0 0 18px rgba(180,0,0,.45));
+        drop-shadow(0 0 22px #500);
+
+    transition:
+        opacity .04s;
 }
 
-/* Cat head */
-
-.catHead {
+.head{
     position:absolute;
 
-    width:205px;
-    height:180px;
-
-    left:38px;
+    left:42px;
     top:105px;
+
+    width:215px;
+    height:190px;
 
     background:
         radial-gradient(
@@ -359,20 +426,18 @@ body {
             #020202 70%
         );
 
-    border-radius:48% 48% 45% 45%;
+    border-radius:50%;
 }
 
-/* Ears */
-
-.ear {
+.ear{
     position:absolute;
 
-    width:100px;
-    height:140px;
+    top:-85px;
+
+    width:105px;
+    height:145px;
 
     background:#030303;
-
-    top:-85px;
 
     clip-path:
         polygon(
@@ -382,86 +447,89 @@ body {
         );
 }
 
-.ear.left {
+.ear.l{
     left:0;
-    transform:rotate(-15deg);
+    transform:rotate(-16deg);
 }
 
-.ear.right {
+.ear.r{
     right:0;
-    transform:rotate(15deg);
+    transform:rotate(16deg);
 }
 
-/* Eyes */
-
-.eye {
+.eye{
     position:absolute;
 
-    width:24px;
-    height:45px;
+    top:77px;
 
-    top:75px;
+    width:25px;
+    height:48px;
 
-    background:#b50000;
+    background:#c00000;
 
     border-radius:50%;
 
     box-shadow:
-        0 0 10px red,
-        0 0 35px red;
+        0 0 15px red,
+        0 0 45px red;
 
-    animation:eyePulse .6s infinite;
+    animation:
+        eyePulse .6s infinite;
 }
 
-.eye:after {
+.eye:after{
     content:"";
+
     position:absolute;
+
     left:10px;
     top:0;
-    width:4px;
+
+    width:5px;
     height:100%;
-    background:#050505;
+
+    background:#000;
 }
 
-.eye.left {
-    left:55px;
+.eye.l{
+    left:57px;
 }
 
-.eye.right {
-    right:55px;
+.eye.r{
+    right:57px;
 }
 
-@keyframes eyePulse {
-    50% {
+@keyframes eyePulse{
+    50%{
         box-shadow:
             0 0 20px red,
-            0 0 55px red;
+            0 0 60px red;
     }
 }
 
-/* Smile */
-
-.mouth {
+.mouth{
     position:absolute;
 
-    left:58px;
-    top:123px;
+    left:56px;
+    top:130px;
 
-    width:90px;
-    height:43px;
+    width:104px;
+    height:48px;
 
     border-bottom:
-        6px solid #8c0000;
+        7px solid #900;
 
     border-radius:
         0 0 70% 70%;
 }
 
-.mouth:after {
+.mouth:after{
     content:"";
+
     position:absolute;
-    left:15px;
-    top:25px;
+
+    left:17px;
+    top:29px;
 
     width:10px;
     height:15px;
@@ -469,178 +537,108 @@ body {
     background:#eee;
 
     box-shadow:
-        18px 0 #eee,
-        36px 0 #eee,
-        54px 0 #eee;
+        19px 0 #eee,
+        38px 0 #eee,
+        57px 0 #eee;
 }
 
-/* Body */
-
-.catBody {
+.body{
     position:absolute;
 
-    left:62px;
-    top:270px;
+    left:70px;
+    top:280px;
 
-    width:155px;
-    height:220px;
+    width:160px;
+    height:230px;
 
     background:#020202;
 
     border-radius:
-        50% 50% 15% 15%;
+        50% 50% 12% 12%;
 }
 
-/* Hat */
-
-.hat {
+.hat{
     position:absolute;
 
-    z-index:3;
+    z-index:5;
 
-    left:62px;
-    top:-50px;
+    left:63px;
+    top:-45px;
 
-    width:150px;
-    height:260px;
+    width:165px;
+    height:285px;
 
     background:
         repeating-linear-gradient(
-            to bottom,
-            #950000 0px,
-            #950000 42px,
-            #080808 42px,
-            #080808 80px
+            #950000 0 45px,
+            #050505 45px 86px
         );
 
     clip-path:
         polygon(
             22% 100%,
-            47% 0%,
-            72% 100%
+            48% 0,
+            74% 100%
         );
 
     transform:rotate(-6deg);
 
     filter:
-        drop-shadow(0 0 8px rgba(255,0,0,.35));
+        drop-shadow(0 0 8px red);
 }
 
-/* =====================================================
-   BLOOD
-===================================================== */
+/* =========================
+   DEMONIC SYMBOL
+========================= */
 
-.blood {
+#symbol{
     position:absolute;
 
-    z-index:35;
-
-    background:
-        radial-gradient(
-            circle,
-            #a40000 0%,
-            #5a0000 65%,
-            transparent 70%
-        );
-
-    border-radius:50%;
-
-    pointer-events:none;
-
-    animation:
-        bloodAppear .25s forwards;
-}
-
-@keyframes bloodAppear {
-    0% {
-        opacity:0;
-        transform:scale(.1);
-    }
-
-    30% {
-        opacity:1;
-    }
-
-    100% {
-        opacity:.8;
-        transform:scale(1);
-    }
-}
-
-/* Blood drip */
-
-.drip {
-    position:absolute;
-
-    width:5px;
-
-    background:#760000;
-
-    border-radius:0 0 5px 5px;
-
-    z-index:36;
-
-    animation:drip .8s forwards;
-}
-
-@keyframes drip {
-    from { height:0; }
-    to { height:var(--height); }
-}
-
-/* =====================================================
-   DEMON SYMBOL
-===================================================== */
-
-#demon {
-    position:absolute;
+    z-index:70;
 
     left:50%;
-    top:48%;
-
-    transform:
-        translate(-50%,-50%)
-        scale(.2)
-        rotate(-30deg);
-
-    color:#a00000;
+    top:47%;
 
     font-size:230px;
 
-    z-index:40;
-
-    opacity:0;
+    color:#9c0000;
 
     text-shadow:
         0 0 15px red,
         0 0 60px red;
 
+    opacity:0;
+
     pointer-events:none;
 }
 
-.demonFlash {
-    animation:demonFlash .9s forwards;
+.symbolFlash{
+    animation:
+        sym .85s forwards;
 }
 
-@keyframes demonFlash {
-    0% {
+@keyframes sym{
+
+    0%{
         opacity:0;
+
         transform:
             translate(-50%,-50%)
-            scale(.2)
-            rotate(-30deg);
+            scale(.15)
+            rotate(-35deg);
     }
 
-    15% {
+    12%{
         opacity:1;
     }
 
-    55% {
-        opacity:.75;
+    55%{
+        opacity:.7;
     }
 
-    100% {
+    100%{
         opacity:0;
+
         transform:
             translate(-50%,-50%)
             scale(1.5)
@@ -648,431 +646,452 @@ body {
     }
 }
 
-/* =====================================================
-   INACTIVITY
-===================================================== */
+/* =========================
+   BLOOD
+========================= */
 
-#inactive {
+#blood{
     position:absolute;
-
-    left:50%;
-    bottom:260px;
-
-    transform:translateX(-50%);
+    inset:0;
 
     z-index:60;
 
-    width:340px;
+    pointer-events:none;
+}
 
-    padding:15px;
+.drop{
+    position:absolute;
+
+    background:
+        radial-gradient(
+            circle,
+            #a40000 0%,
+            #650000 60%,
+            transparent 72%
+        );
+
+    border-radius:50%;
+
+    box-shadow:
+        0 0 7px #300;
+
+    animation:
+        dropIn .22s forwards;
+}
+
+.drip{
+    position:absolute;
+
+    width:5px;
+
+    background:#650000;
+
+    border-radius:
+        0 0 5px 5px;
+
+    animation:
+        drip .8s forwards;
+}
+
+@keyframes dropIn{
+
+    from{
+        opacity:0;
+        transform:scale(.1);
+    }
+
+    to{
+        opacity:.85;
+        transform:scale(1);
+    }
+}
+
+@keyframes drip{
+
+    from{
+        height:0;
+    }
+
+    to{
+        height:var(--h);
+    }
+}
+
+/* =========================
+   CRYPTIC MESSAGE
+========================= */
+
+#cryptic{
+    position:absolute;
+
+    z-index:90;
+
+    left:50%;
+    top:68%;
+
+    transform:translate(-50%,-50%);
+
+    width:min(90%,700px);
 
     text-align:center;
 
-    border:1px solid #777;
+    color:#a90000;
 
-    background:rgba(0,0,0,.72);
+    font-size:
+        clamp(
+            15px,
+            2.3vw,
+            27px
+        );
 
-    font-size:14px;
+    letter-spacing:3px;
+
+    text-shadow:
+        0 0 10px red;
+
+    opacity:0;
 }
 
-#inactiveTime {
-    display:block;
-
-    color:#d00000;
-
-    font-size:29px;
-
-    margin:7px 0;
+.crypticShow{
+    animation:
+        crypt 4s forwards;
 }
 
-/* =====================================================
-   DO NOT LOOK
-===================================================== */
+@keyframes crypt{
 
-#dontLook {
+    0%{
+        opacity:0;
+        filter:blur(10px);
+    }
+
+    15%{
+        opacity:1;
+        filter:none;
+    }
+
+    75%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+    }
+}
+
+/* =========================
+   INACTIVITY
+========================= */
+
+#idleBox{
     position:absolute;
 
-    left:28px;
-    bottom:285px;
+    z-index:90;
 
-    z-index:55;
+    left:50%;
+    bottom:198px;
 
-    width:150px;
+    transform:translateX(-50%);
+
+    width:320px;
+
+    text-align:center;
+
+    border:1px solid #666;
+
+    background:#000b;
 
     padding:10px;
 
-    border:1px solid #a00000;
-
-    color:#d00000;
-
-    text-align:center;
-
-    font-size:14px;
+    font-size:12px;
 }
 
-.eyeIcon {
+#idleTime{
     display:block;
-    font-size:35px;
-    margin-top:5px;
+
+    font-size:28px;
+
+    color:#c00000;
+
+    margin:5px;
 }
 
-/* =====================================================
+/* =========================
    PROGRESS
-===================================================== */
+========================= */
 
-#progress {
+#progress{
     position:absolute;
 
-    right:28px;
-    bottom:250px;
+    z-index:80;
 
-    z-index:50;
+    right:22px;
+    bottom:205px;
 
-    width:230px;
+    width:220px;
+
+    font-size:12px;
 }
 
-.progressTitle {
+#progress h3{
+    font-weight:normal;
+
     color:#d00000;
-    margin-bottom:12px;
+
+    margin:
+        0 0 10px;
 }
 
-.stage {
-    margin:11px 0;
-    font-size:14px;
-}
-
-.stage.complete {
-    color:#aaa;
-}
-
-.stage.current {
-    color:#e00000;
-    text-shadow:0 0 10px red;
-}
-
-.stage.locked {
+.stage{
+    margin:10px 0;
     color:#444;
 }
 
-.lock {
-    font-size:28px;
-    text-align:center;
-    margin-top:8px;
+.stage.done{
+    color:#999;
 }
 
-/* =====================================================
-   BOTTOM STAGE PANELS
-===================================================== */
+.stage.now{
+    color:#d00000;
 
-#stages {
+    text-shadow:
+        0 0 8px red;
+}
+
+/* =========================
+   BOTTOM PANELS
+========================= */
+
+#bottom{
     position:absolute;
 
-    left:28px;
-    right:28px;
-    bottom:20px;
+    z-index:80;
 
-    height:175px;
+    left:22px;
+    right:22px;
+    bottom:15px;
 
-    z-index:50;
+    height:150px;
 
     display:grid;
+
     grid-template-columns:
         repeat(5,1fr)
-        1.25fr;
-
-    gap:0;
+        1.3fr;
 }
 
-.stagePanel {
+.panel{
     border:1px solid #333;
 
-    padding:12px;
+    padding:10px;
 
-    position:relative;
-
-    background:rgba(0,0,0,.45);
+    background:#0008;
 
     overflow:hidden;
 }
 
-.stagePanel.active {
-    border-color:#b00000;
+.panel.now{
+    border-color:#900;
 }
 
-.stagePanel h3 {
-    margin:0 0 10px;
+.panel h4{
+    margin:
+        0 0 8px;
 
-    font-size:14px;
+    font-size:12px;
 
     font-weight:normal;
 }
 
-.status {
+.panel small{
     color:#777;
-    font-size:12px;
 }
 
-.active .status {
-    color:#d00000;
+.messages{
+    color:#c00000;
+
+    font-size:10px;
+
+    line-height:17px;
 }
 
-.wave {
-    position:absolute;
-
-    left:10px;
-    right:10px;
-    bottom:20px;
-
-    height:45px;
-
-    opacity:.5;
-
-    background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 5px,
-            #aaa 6px,
-            transparent 8px
-        );
-
-    clip-path:
-        polygon(
-            0 50%,
-            5% 45%,
-            10% 70%,
-            15% 20%,
-            20% 80%,
-            25% 30%,
-            30% 60%,
-            35% 15%,
-            40% 80%,
-            45% 45%,
-            50% 65%,
-            55% 25%,
-            60% 70%,
-            65% 40%,
-            70% 80%,
-            75% 20%,
-            80% 60%,
-            85% 30%,
-            90% 70%,
-            95% 40%,
-            100% 50%,
-            100% 100%,
-            0 100%
-        );
-}
-
-/* Inactivity message panel */
-
-#messages {
-    color:#d00000;
-
-    font-size:11px;
-
-    line-height:18px;
-
-    overflow:hidden;
-}
-
-.msg {
-    opacity:.8;
-}
-
-/* =====================================================
+/* =========================
    BOTTOM WARNING
-===================================================== */
+========================= */
 
-#bottomWarning {
+#bottomWarn{
     position:absolute;
-
-    left:50%;
-    bottom:2px;
-
-    transform:translateX(-50%);
-
-    z-index:70;
-
-    color:#d00000;
-
-    font-size:17px;
-
-    text-align:center;
-
-    text-shadow:0 0 10px red;
-}
-
-/* =====================================================
-   FLASH
-===================================================== */
-
-#flash {
-    position:fixed;
-
-    inset:0;
-
-    background:#fff;
-
-    opacity:0;
-
-    z-index:100;
-
-    pointer-events:none;
-}
-
-/* =====================================================
-   BLACKOUT
-===================================================== */
-
-#blackout {
-    position:fixed;
-
-    inset:0;
-
-    background:#000;
-
-    opacity:0;
 
     z-index:90;
 
+    left:50%;
+    bottom:1px;
+
+    transform:translateX(-50%);
+
+    text-align:center;
+
+    color:#d00000;
+
+    font-size:14px;
+
+    text-shadow:
+        0 0 10px red;
+}
+
+/* =========================
+   FLASH / BLACKOUT
+========================= */
+
+#flash,
+#black{
+    position:fixed;
+    inset:0;
+
     pointer-events:none;
 }
 
-/* =====================================================
-   CORRUPTION
-===================================================== */
-
-.corrupt {
-    animation:
-        corruption .12s infinite;
+#flash{
+    z-index:500;
+    opacity:0;
+    background:#fff;
 }
 
-@keyframes corruption {
+#black{
+    z-index:450;
+    background:#000;
+    opacity:0;
+}
 
-    0% {
+/* =========================
+   GLITCH
+========================= */
+
+.glitch{
+    animation:
+        gl .11s steps(2) infinite;
+}
+
+@keyframes gl{
+
+    0%{
         transform:translate(0);
         filter:none;
     }
 
-    20% {
-        transform:translate(-8px,3px);
-        filter:hue-rotate(70deg);
+    25%{
+        transform:translate(-9px,3px);
+        filter:
+            hue-rotate(80deg)
+            contrast(1.7);
     }
 
-    40% {
-        transform:translate(8px,-4px);
-        filter:contrast(2);
-    }
-
-    60% {
-        transform:translate(-5px,-3px);
+    50%{
+        transform:translate(7px,-4px);
         filter:invert(.1);
     }
 
-    80% {
-        transform:translate(4px,6px);
+    75%{
+        transform:translate(-5px,5px);
     }
 
-    100% {
+    100%{
         transform:translate(0);
     }
 }
 
-/* =====================================================
+/* =========================
    FINAL TAKEOVER
-===================================================== */
+========================= */
 
-#takeover {
+#takeover{
     position:fixed;
+
+    z-index:1000;
 
     inset:0;
 
     background:#000;
 
-    z-index:200;
-
-    display:flex;
+    display:none;
 
     align-items:center;
     justify-content:center;
 
     flex-direction:column;
 
-    opacity:0;
-
-    pointer-events:none;
+    text-align:center;
 }
 
-#takeoverText {
+#takeover h1{
     color:#d00000;
 
-    font-size:35px;
+    font-size:
+        clamp(
+            28px,
+            7vw,
+            75px
+        );
 
-    letter-spacing:5px;
+    letter-spacing:8px;
 
     text-shadow:
-        0 0 10px red,
-        0 0 40px red;
+        0 0 30px red;
 
-    animation:takeoverPulse 1s infinite;
+    animation:
+        pulse 1s infinite;
 }
 
-@keyframes takeoverPulse {
-    50% {
-        opacity:.3;
+#takeover p{
+    color:#555;
+    letter-spacing:4px;
+}
+
+@keyframes pulse{
+
+    50%{
+        opacity:.2;
     }
 }
 
-#takeoverSub {
-    margin-top:20px;
-    color:#666;
-}
-
-/* =====================================================
+/* =========================
    MOBILE
-===================================================== */
+========================= */
 
-@media(max-width:800px) {
+@media(max-width:800px){
 
-    #warning {
-        display:none;
-    }
-
-    #signalBox {
-        transform:scale(.75);
-        transform-origin:top right;
-    }
-
+    #alert,
+    #signal,
     #log,
-    #dontLook,
-    #progress {
+    #warning,
+    #progress{
         display:none;
     }
 
-    #stages {
-        grid-template-columns:repeat(2,1fr);
-        height:130px;
+    #bottom{
+        grid-template-columns:
+            repeat(2,1fr);
+
+        height:120px;
     }
 
-    .stagePanel:nth-child(n+3) {
+    .panel:nth-child(n+3){
         display:none;
     }
 
-    #inactive {
-        bottom:170px;
-        transform:translateX(-50%) scale(.8);
+    #idleBox{
+        bottom:150px;
+
+        transform:
+            translateX(-50%)
+            scale(.82);
     }
 
-    #entity {
+    #cat{
         left:50%;
+
         transform:
             translate(-50%,-50%)
-            scale(.55);
-    }
-
-    #bottomWarning {
-        font-size:12px;
+            scale(.5);
     }
 }
 </style>
@@ -1080,382 +1099,404 @@ body {
 
 <body>
 
-<div id="screen">
+<!-- =========================
+     ENTER
+========================= -->
 
-    <div id="hallway"></div>
+<div id="enter">
 
-    <div id="static"></div>
-    <div id="scanlines"></div>
+    <h1>CAM_13</h1>
 
-    <!-- HEADER -->
+    <p>CLICK TO ENTER</p>
 
-    <div id="top">
-
-        <div class="corner">
-            CAMERA FEED ONLINE
-
-            <div class="live">
-                <span class="liveDot"></span>
-                LIVE
-            </div>
-        </div>
-
-        <div id="warning">
-            WARNING: VIEWER PRESENCE DETECTED
-        </div>
-
-        <div id="clock">
-            <div id="time">03:17:25 AM</div>
-            <div id="date">08/28/2026</div>
-            <div id="camName">CAM 7 - HALLWAY B</div>
-        </div>
-
+    <div class="warning">
+        HEADPHONES NOT RECOMMENDED //
+        DO NOT WATCH ALONE
     </div>
 
-    <!-- SIGNAL -->
+</div>
 
-    <div id="signalBox">
 
-        <div class="signalTitle">
-            SIGNAL STRENGTH
-        </div>
+<!-- =========================
+     MAIN
+========================= -->
 
-        <div id="bars">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
+<div id="app">
 
-        <div style="
-            text-align:center;
-            margin-top:9px;
-            font-size:12px;
-        ">
-            CONNECTION:
-            <span style="color:#d00000">
-                UNSTABLE
-            </span>
-        </div>
+    <div id="hall"></div>
 
-    </div>
 
-    <!-- LOG -->
+    <!-- CAT -->
 
-    <div id="log">
-
-        <div class="logTitle">
-            SYSTEM LOG
-        </div>
-
-        <div class="logLine">
-            01:17:23 — MOTION DETECTED
-        </div>
-
-        <div class="logLine">
-            01:17:24 — MOTION DETECTED
-        </div>
-
-        <div class="logLine">
-            01:17:24 — MOTION DETECTED
-        </div>
-
-        <div class="logLine red">
-            01:17:25 — UNKNOWN ENTITY
-        </div>
-
-        <div class="logLine red">
-            01:17:25 — FEED CORRUPTING
-        </div>
-
-    </div>
-
-    <!-- ENTITY -->
-
-    <div id="entity">
+    <div id="cat">
 
         <div class="hat"></div>
 
-        <div class="catHead">
+        <div class="head">
 
-            <div class="ear left"></div>
-            <div class="ear right"></div>
+            <div class="ear l"></div>
+            <div class="ear r"></div>
 
-            <div class="eye left"></div>
-            <div class="eye right"></div>
+            <div class="eye l"></div>
+            <div class="eye r"></div>
 
             <div class="mouth"></div>
 
         </div>
 
-        <div class="catBody"></div>
+        <div class="body"></div>
 
     </div>
 
-    <!-- DEMON -->
 
-    <div id="demon">⛧</div>
+    <!-- SYMBOL -->
 
-    <!-- DON'T LOOK -->
+    <div id="symbol">⛧</div>
 
-    <div id="dontLook">
 
-        DO NOT<br>
-        LOOK AWAY
+    <!-- BLOOD -->
 
-        <span class="eyeIcon">◉</span>
+    <div id="blood"></div>
 
-    </div>
 
-    <!-- INACTIVITY -->
+    <!-- CRYPTIC -->
 
-    <div id="inactive">
+    <div id="cryptic"></div>
 
-        INACTIVITY DETECTED
 
-        <span id="inactiveTime">
-            00:00:00
-        </span>
+    <!-- HUD -->
 
-        THINGS WILL ESCALATE SOON.
+    <div id="hud">
 
-    </div>
-
-    <!-- PROGRESS -->
-
-    <div id="progress">
-
-        <div class="progressTitle">
-            PROGRESS
+        <div id="live">
+            <i></i>
+            LIVE // RECORDING
         </div>
 
-        <div class="stage current" id="p1">
-            STAGE 1 — WHISPERS
+
+        <div id="alert">
+            WARNING:
+            VIEWER PRESENCE DETECTED
         </div>
 
-        <div class="stage" id="p2">
-            STAGE 2 — MOVEMENTS
+
+        <div id="cam">
+
+            <div id="clock">
+                03:17:25 AM
+            </div>
+
+            <div id="date">
+                08/28/2026
+            </div>
+
+            <div>
+                CAM 13 // HALLWAY B
+            </div>
+
         </div>
 
-        <div class="stage" id="p3">
-            STAGE 3 — APPARITIONS
+
+        <!-- SIGNAL -->
+
+        <div id="signal">
+
+            SIGNAL STRENGTH
+
+            <div class="bars">
+
+                <b></b>
+                <b></b>
+                <b></b>
+                <b></b>
+                <b></b>
+                <b></b>
+                <b></b>
+                <b></b>
+
+            </div>
+
+            CONNECTION:
+            <span style="color:#d00000">
+                UNSTABLE
+            </span>
+
         </div>
 
-        <div class="stage" id="p4">
-            STAGE 4 — CORRUPTION
+
+        <!-- SYSTEM LOG -->
+
+        <div id="log">
+
+            <div id="logTitle">
+                SYSTEM LOG
+            </div>
+
         </div>
 
-        <div class="stage locked" id="p5">
-            STAGE 5 — TAKEOVER
+
+        <!-- WARNING -->
+
+        <div id="warning">
+
+            DO NOT<br>
+            LOOK AWAY
+
+            <strong>◉</strong>
+
         </div>
 
-        <div class="lock">
-            🔒
+
+        <!-- INACTIVITY -->
+
+        <div id="idleBox">
+
+            INACTIVITY DETECTED
+
+            <span id="idleTime">
+                00:00:00
+            </span>
+
+            THE FEED DOES NOT LIKE
+            BEING IGNORED.
+
         </div>
 
-    </div>
 
-    <!-- BOTTOM PANELS -->
+        <!-- PROGRESS -->
 
-    <div id="stages">
-
-        <div class="stagePanel active">
+        <div id="progress">
 
             <h3>
-                STAGE 1 — WHISPERS
+                PROGRESSION
             </h3>
 
-            <div class="status">
-                COMPLETE
+            <div
+                class="stage now"
+                id="s1"
+            >
+                STAGE 1 —
+                WHISPERS
             </div>
 
-            <p style="font-size:11px;color:#777">
-                You heard things...
-            </p>
-
-            <div class="wave"></div>
-
-        </div>
-
-        <div class="stagePanel active">
-
-            <h3>
-                STAGE 2 — MOVEMENTS
-            </h3>
-
-            <div class="status">
-                COMPLETE
+            <div
+                class="stage"
+                id="s2"
+            >
+                STAGE 2 —
+                MOVEMENTS
             </div>
 
-            <p style="font-size:11px;color:#777">
-                You saw movement...
-            </p>
-
-            <div class="wave"></div>
-
-        </div>
-
-        <div class="stagePanel active">
-
-            <h3>
-                STAGE 3 — APPARITIONS
-            </h3>
-
-            <div class="status">
-                COMPLETE
+            <div
+                class="stage"
+                id="s3"
+            >
+                STAGE 3 —
+                APPARITIONS
             </div>
 
-            <p style="font-size:11px;color:#777">
-                It saw you...
-            </p>
-
-        </div>
-
-        <div class="stagePanel active" id="corruptionPanel">
-
-            <h3>
-                STAGE 4 — CORRUPTION
-            </h3>
-
-            <div class="status">
-                IN PROGRESS
+            <div
+                class="stage"
+                id="s4"
+            >
+                STAGE 4 —
+                CORRUPTION
             </div>
 
-            <p style="font-size:11px;color:#777">
-                Reality breaks...
-            </p>
-
-        </div>
-
-        <div class="stagePanel">
-
-            <h3>
-                STAGE 5 — TAKEOVER
-            </h3>
-
-            <div class="status">
-                LOCKED
-            </div>
-
-            <div class="lock">
-                🔒
+            <div
+                class="stage"
+                id="s5"
+            >
+                STAGE 5 —
+                TAKEOVER
             </div>
 
         </div>
 
-        <div class="stagePanel" id="messages">
 
-            <div style="color:#aaa;margin-bottom:8px">
-                INACTIVITY MESSAGES
+        <!-- BOTTOM -->
+
+        <div id="bottom">
+
+            <div class="panel now">
+
+                <h4>
+                    STAGE 1 — WHISPERS
+                </h4>
+
+                <small>
+                    COMPLETE
+                </small>
+
             </div>
 
-            <div class="msg">
-                00:00:15 — WHY DID YOU STOP?
+
+            <div class="panel">
+
+                <h4>
+                    STAGE 2 — MOVEMENTS
+                </h4>
+
+                <small>
+                    WAITING
+                </small>
+
             </div>
 
-            <div class="msg">
-                00:00:30 — I DON'T LIKE SILENCE.
+
+            <div class="panel">
+
+                <h4>
+                    STAGE 3 — APPARITIONS
+                </h4>
+
+                <small>
+                    LOCKED
+                </small>
+
             </div>
 
-            <div class="msg">
-                00:00:45 — HE DOESN'T EITHER.
+
+            <div class="panel">
+
+                <h4>
+                    STAGE 4 — CORRUPTION
+                </h4>
+
+                <small>
+                    LOCKED
+                </small>
+
             </div>
 
-            <div class="msg">
-                00:01:00 — TURN AROUND.
+
+            <div class="panel">
+
+                <h4>
+                    STAGE 5 — TAKEOVER
+                </h4>
+
+                <small>
+                    LOCKED
+                </small>
+
             </div>
 
-            <div class="msg">
-                00:01:10 — TOO LATE.
+
+            <div
+                class="panel messages"
+                id="messages"
+            >
+
+                <div
+                    style="color:#aaa"
+                >
+                    INACTIVITY LOG
+                </div>
+
             </div>
 
-            <div class="msg">
-                00:01:20 — I ALREADY SAW YOU.
-            </div>
+        </div>
+
+
+        <div id="bottomWarn">
+
+            MOVE YOUR MOUSE.<br>
+
+            DON'T LET HIM NOTICE YOU.
 
         </div>
 
     </div>
 
-    <div id="bottomWarning">
-        MOVE YOUR MOUSE.<br>
-        DON'T MAKE HIM ANGRY.
-    </div>
 
+    <!-- CRT -->
+
+    <div id="static"></div>
+    <div id="scan"></div>
     <div id="vignette"></div>
 
 </div>
+
 
 <!-- FLASH -->
 
 <div id="flash"></div>
 
+
 <!-- BLACKOUT -->
 
-<div id="blackout"></div>
+<div id="black"></div>
 
-<!-- FINAL -->
+
+<!-- TAKEOVER -->
 
 <div id="takeover">
 
-    <div id="takeoverText">
-        SIGNAL HIJACKED
-    </div>
+    <h1>
+        HE FOUND YOU
+    </h1>
 
-    <div id="takeoverSub">
-        HE IS WATCHING NOW.
-    </div>
+    <p>
+        CAMERA CONTROL TRANSFERRED
+    </p>
+
+    <p>
+        DO NOT CLOSE THE WINDOW
+    </p>
 
 </div>
 
 
 <script>
 
-/* =====================================================
+/* =========================================================
    HORROR ENGINE
-===================================================== */
+========================================================= */
 
-let idleSeconds = 0;
+let audio = null;
+
+let started = false;
+
+let idle = 0;
+
 let stage = 1;
-let lastMovement = Date.now();
 
-const screen =
-    document.getElementById("screen");
 
-const entity =
-    document.getElementById("entity");
+/* ELEMENTS */
+
+const app =
+    document.getElementById("app");
+
+const cat =
+    document.getElementById("cat");
+
+const symbol =
+    document.getElementById("symbol");
+
+const blood =
+    document.getElementById("blood");
+
+const cryptic =
+    document.getElementById("cryptic");
 
 const flash =
     document.getElementById("flash");
 
-const blackout =
-    document.getElementById("blackout");
-
-const demon =
-    document.getElementById("demon");
-
-const inactiveTime =
-    document.getElementById("inactiveTime");
-
-const corruptionPanel =
-    document.getElementById("corruptionPanel");
+const black =
+    document.getElementById("black");
 
 const takeover =
     document.getElementById("takeover");
 
-/* =====================================================
+
+/* =========================================================
    AUDIO
-===================================================== */
+========================================================= */
 
-let audio = null;
+function audioInit(){
 
-function initAudio() {
-
-    if (!audio) {
+    if(!audio){
 
         audio =
             new (
@@ -1465,16 +1506,25 @@ function initAudio() {
 
     }
 
-    if (audio.state === "suspended") {
+    if(
+        audio.state ===
+        "suspended"
+    ){
+
         audio.resume();
+
     }
+
 }
 
-/* Drone */
 
-function drone(duration=1.5) {
+/* LOW DRONE */
 
-    initAudio();
+function drone(
+    duration = 2
+){
+
+    audioInit();
 
     const oscillator =
         audio.createOscillator();
@@ -1482,10 +1532,12 @@ function drone(duration=1.5) {
     const gain =
         audio.createGain();
 
-    oscillator.type = "sawtooth";
+    oscillator.type =
+        "sawtooth";
 
     oscillator.frequency.value =
-        45 + Math.random()*25;
+        48 +
+        Math.random()*18;
 
     gain.gain.setValueAtTime(
         .0001,
@@ -1493,30 +1545,37 @@ function drone(duration=1.5) {
     );
 
     gain.gain.exponentialRampToValueAtTime(
-        .08,
+        .06,
         audio.currentTime+.2
     );
 
     gain.gain.exponentialRampToValueAtTime(
         .0001,
-        audio.currentTime+duration
+        audio.currentTime+
+        duration
     );
 
     oscillator.connect(gain);
-    gain.connect(audio.destination);
+
+    gain.connect(
+        audio.destination
+    );
 
     oscillator.start();
 
     oscillator.stop(
-        audio.currentTime+duration
+        audio.currentTime+
+        duration
     );
+
 }
 
-/* Scream */
 
-function scream() {
+/* SCREAM */
 
-    initAudio();
+function scream(){
+
+    audioInit();
 
     const osc =
         audio.createOscillator();
@@ -1524,15 +1583,16 @@ function scream() {
     const gain =
         audio.createGain();
 
-    osc.type = "square";
+    osc.type =
+        "square";
 
     osc.frequency.setValueAtTime(
-        180,
+        150,
         audio.currentTime
     );
 
     osc.frequency.exponentialRampToValueAtTime(
-        1500,
+        1700,
         audio.currentTime+.45
     );
 
@@ -1552,32 +1612,80 @@ function scream() {
     );
 
     osc.connect(gain);
-    gain.connect(audio.destination);
+
+    gain.connect(
+        audio.destination
+    );
 
     osc.start();
 
     osc.stop(
         audio.currentTime+.85
     );
+
 }
 
-/* Static noise */
 
-function staticNoise() {
+/* WHISPER */
 
-    initAudio();
+function whisper(){
+
+    audioInit();
+
+    const osc =
+        audio.createOscillator();
+
+    const gain =
+        audio.createGain();
+
+    osc.type =
+        "triangle";
+
+    osc.frequency.value =
+        55 +
+        Math.random()*70;
+
+    gain.gain.value =
+        .018;
+
+    osc.connect(gain);
+
+    gain.connect(
+        audio.destination
+    );
+
+    osc.start();
+
+    osc.stop(
+        audio.currentTime+
+        .5 +
+        Math.random()*.5
+    );
+
+}
+
+
+/* STATIC SOUND */
+
+function staticSound(){
+
+    audioInit();
 
     const buffer =
         audio.createBuffer(
             1,
-            audio.sampleRate*.35,
+            audio.sampleRate*.3,
             audio.sampleRate
         );
 
     const data =
         buffer.getChannelData(0);
 
-    for(let i=0;i<data.length;i++) {
+    for(
+        let i=0;
+        i<data.length;
+        i++
+    ){
 
         data[i] =
             Math.random()*2-1;
@@ -1590,445 +1698,466 @@ function staticNoise() {
     const gain =
         audio.createGain();
 
-    source.buffer=buffer;
+    source.buffer =
+        buffer;
 
-    gain.gain.value=.045;
+    gain.gain.value =
+        .025;
 
     source.connect(gain);
-    gain.connect(audio.destination);
+
+    gain.connect(
+        audio.destination
+    );
 
     source.start();
+
 }
 
-/* =====================================================
-   FLASH
-===================================================== */
 
-function screenFlash(color="#fff") {
+/* =========================================================
+   SCREEN EFFECTS
+========================================================= */
 
-    flash.style.background=color;
+function flashScreen(
+    color="#fff",
+    duration=70
+){
+
+    flash.style.background =
+        color;
 
     flash.style.opacity =
-        Math.random()*.75+.25;
+        .8;
 
     setTimeout(()=>{
 
-        flash.style.opacity=0;
+        flash.style.opacity =
+            0;
 
-    },30+Math.random()*100);
+    },duration);
+
 }
 
-/* =====================================================
-   ENTITY
-===================================================== */
 
-function showEntity(time=400) {
+function blackoutScreen(
+    duration=600
+){
 
-    entity.style.opacity=1;
-
-    entity.style.transform=`
-        translate(-50%,-50%)
-        scale(${.5+Math.random()*.65})
-        rotate(${Math.random()*8-4}deg)
-    `;
+    black.style.opacity =
+        1;
 
     setTimeout(()=>{
 
-        entity.style.opacity=0;
+        black.style.opacity =
+            0;
 
-    },time);
+    },duration);
+
 }
 
-/* =====================================================
+
+function glitch(
+    duration=500
+){
+
+    app.classList.add(
+        "glitch"
+    );
+
+    setTimeout(()=>{
+
+        app.classList.remove(
+            "glitch"
+        );
+
+    },duration);
+
+}
+
+
+/* =========================================================
+   CAT
+========================================================= */
+
+function showCat(
+    duration=180
+){
+
+    cat.style.opacity =
+        1;
+
+    cat.style.transform =
+
+        `translate(-50%,-50%)
+         scale(${.45+
+         Math.random()*.7})
+         rotate(${Math.random()*10-5}deg)`;
+
+    setTimeout(()=>{
+
+        cat.style.opacity =
+            0;
+
+    },duration);
+
+}
+
+
+/* =========================================================
    BLOOD
-===================================================== */
+========================================================= */
 
-function bloodBurst(amount=35) {
+function bloodSplatter(
+    amount=30
+){
 
-    for(let i=0;i<amount;i++) {
+    for(
+        let i=0;
+        i<amount;
+        i++
+    ){
 
-        const b =
-            document.createElement("div");
-
-        b.className="blood";
-
-        const size =
-            Math.random()*35+5;
-
-        b.style.width=size+"px";
-        b.style.height=size+"px";
-
-        b.style.left =
-            Math.random()*100+"%";
-
-        b.style.top =
-            Math.random()*100+"%";
-
-        screen.appendChild(b);
-
-        if(Math.random()<.25) {
-
-            const drip =
-                document.createElement("div");
-
-            drip.className="drip";
-
-            drip.style.left =
-                b.style.left;
-
-            drip.style.top =
-                b.style.top;
-
-            drip.style.setProperty(
-                "--height",
-                Math.random()*120+30+"px"
+        const drop =
+            document.createElement(
+                "span"
             );
 
-            screen.appendChild(drip);
+        drop.className =
+            "drop";
+
+        const size =
+            3 +
+            Math.random()*42;
+
+        drop.style.width =
+            size+"px";
+
+        drop.style.height =
+            size+"px";
+
+        drop.style.left =
+            Math.random()*100+
+            "%";
+
+        drop.style.top =
+            Math.random()*100+
+            "%";
+
+        blood.appendChild(
+            drop
+        );
+
+
+        /* DRIPS */
+
+        if(
+            Math.random()<.22
+        ){
+
+            const drip =
+                document.createElement(
+                    "span"
+                );
+
+            drip.className =
+                "drip";
+
+            drip.style.left =
+                drop.style.left;
+
+            drip.style.top =
+                drop.style.top;
+
+            drip.style.setProperty(
+                "--h",
+                (
+                    25+
+                    Math.random()*130
+                )+"px"
+            );
+
+            blood.appendChild(
+                drip
+            );
 
             setTimeout(()=>{
+
                 drip.remove();
-            },1200);
+
+            },1600);
 
         }
 
+
         setTimeout(()=>{
-            b.remove();
-        },5000);
+
+            drop.remove();
+
+        },6000);
+
     }
+
 }
 
-/* =====================================================
-   DEMON SYMBOL
-===================================================== */
 
-function demonFlash() {
+/* =========================================================
+   DEMONIC SYMBOL
+========================================================= */
 
-    const symbols=[
+function demonFlash(){
+
+    const signs = [
+
         "⛧",
         "666",
         "☠",
         "†",
         "⸸",
         "👁"
+
     ];
 
-    demon.innerText =
-        symbols[
+    symbol.textContent =
+        signs[
             Math.floor(
-                Math.random()*symbols.length
+                Math.random()*
+                signs.length
             )
         ];
 
-    demon.classList.remove(
-        "demonFlash"
+    symbol.classList.remove(
+        "symbolFlash"
     );
 
-    void demon.offsetWidth;
+    void symbol.offsetWidth;
 
-    demon.classList.add(
-        "demonFlash"
+    symbol.classList.add(
+        "symbolFlash"
     );
+
 }
 
-/* =====================================================
-   CORRUPTION
-===================================================== */
 
-function corrupt() {
+/* =========================================================
+   LOGGING
+========================================================= */
 
-    screen.classList.add("corrupt");
-
-    setTimeout(()=>{
-
-        screen.classList.remove(
-            "corrupt"
-        );
-
-    },300+Math.random()*700);
-}
-
-/* =====================================================
-   BLACKOUT
-===================================================== */
-
-function blackoutScreen(time=1000) {
-
-    blackout.style.opacity=1;
-
-    setTimeout(()=>{
-
-        blackout.style.opacity=0;
-
-    },time);
-}
-
-/* =====================================================
-   LOG
-===================================================== */
-
-function addLog(text,red=false) {
+function addLog(
+    text,
+    red=false
+){
 
     const log =
-        document.getElementById("log");
-
-    const line =
-        document.createElement("div");
-
-    line.className =
-        "logLine"+(red?" red":"");
-
-    const now =
-        new Date();
-
-    const time =
-        now.toLocaleTimeString(
-            [],
-            {
-                hour12:false
-            }
+        document.getElementById(
+            "log"
         );
 
-    line.innerText =
-        time+" — "+text;
+    const line =
+        document.createElement(
+            "div"
+        );
 
-    log.appendChild(line);
+    if(red){
 
-    while(log.children.length>9) {
-        log.removeChild(log.children[1]);
+        line.className =
+            "r";
+
     }
+
+    line.textContent =
+        new Date()
+        .toLocaleTimeString()
+        +" — "+
+        text;
+
+    log.appendChild(
+        line
+    );
+
+
+    while(
+        log.children.length>9
+    ){
+
+        log.removeChild(
+            log.children[1]
+        );
+
+    }
+
 }
 
-/* =====================================================
-   SIGNAL
-===================================================== */
 
-function signalDrop() {
+/* =========================================================
+   SIGNAL
+========================================================= */
+
+function signalDrop(){
 
     const bars =
-        document.querySelectorAll(".bar");
+        document.querySelectorAll(
+            ".bars b"
+        );
 
     const strength =
         Math.max(
             1,
-            8-stage-Math.floor(
-                Math.random()*3
+            8-stage-
+            Math.floor(
+                Math.random()*2
             )
         );
 
-    bars.forEach((bar,i)=>{
+    bars.forEach(
+        (bar,index)=>{
 
-        bar.classList.toggle(
-            "dead",
-            i>=strength
-        );
-
-    });
-}
-
-/* =====================================================
-   PROGRESSION
-===================================================== */
-
-function updateStage(newStage) {
-
-    if(newStage<=stage) return;
-
-    stage=newStage;
-
-    for(let i=1;i<=5;i++) {
-
-        const p =
-            document.getElementById(
-                "p"+i
+            bar.classList.toggle(
+                "off",
+                index>=strength
             );
 
-        if(!p) continue;
-
-        if(i<stage) {
-
-            p.className=
-                "stage complete";
-
-        } else if(i===stage) {
-
-            p.className=
-                "stage current";
-
-        } else {
-
-            p.className=
-                "stage locked";
-
         }
-    }
-
-    addLog(
-        "PROGRESSION → STAGE "+stage,
-        true
     );
 
-    signalDrop();
 }
 
-/* =====================================================
-   STAGE EVENTS
-===================================================== */
 
-function stageEvent() {
+/* =========================================================
+   CRYPTIC MESSAGES
+========================================================= */
 
-    if(stage===1) {
+const creepyMessages = [
 
-        drone();
+    "WHY DID YOU STOP MOVING?",
 
-        if(Math.random()<.5) {
-            addLog(
-                "AUDIO ANOMALY",
-                true
-            );
-        }
+    "THE CAMERA IS NOT WHERE YOU THINK IT IS.",
 
-    }
+    "HE IS STANDING OUTSIDE THE FRAME.",
 
-    else if(stage===2) {
+    "DO NOT LOOK BEHIND YOU.",
 
-        corrupt();
+    "YOU HAVE BEEN WATCHING FOR TOO LONG.",
 
-        addLog(
-            "MOVEMENT BEHIND CAMERA",
-            true
-        );
+    "THAT WAS NOT A GLITCH.",
 
-        if(Math.random()<.35) {
-            showEntity(100);
-        }
+    "HE KNOWS WHEN YOU BLINK.",
 
-    }
+    "THE HALLWAY IS EMPTY. YOU ARE NOT.",
 
-    else if(stage===3) {
+    "STOP LISTENING FOR HIM.",
 
-        screenFlash();
+    "HE DOES NOT LIKE THE LIGHT.",
 
-        showEntity(
-            80+Math.random()*250
-        );
+    "CAMERA 14 HAS BEEN DISCONNECTED.",
 
-        addLog(
-            "UNKNOWN ENTITY DETECTED",
-            true
-        );
+    "THERE IS NO CAMERA 14.",
 
-        if(Math.random()<.4) {
-            demonFlash();
-        }
+    "WHY CAN HE SEE YOU?",
 
-    }
+    "YOU SHOULD HAVE LEFT AT THE FIRST SCREAM.",
 
-    else if(stage===4) {
+    "THE RED MARKS ARE GETTING CLOSER.",
 
-        bloodBurst(
-            15+Math.floor(
-                Math.random()*35
-            )
-        );
+    "I CAN HEAR YOU MOVING.",
 
-        corrupt();
+    "HE IS SMILING AGAIN.",
 
-        screenFlash("#7a0000");
+    "DO NOT SAY HIS NAME.",
 
-        demonFlash();
+    "THE FEED ENDS WHEN YOU LOOK AWAY.",
 
-        addLog(
-            "REALITY INTEGRITY: 17%",
-            true
-        );
+    "YOU ARE NOT ALONE IN THE ROOM.",
 
-        if(Math.random()<.35) {
-            scream();
-        }
+    "HE WAS NOT THERE WHEN YOU STARTED.",
 
-    }
+    "COUNT THE EYES.",
 
-    else if(stage>=5) {
+    "DON'T CHECK THE DOOR.",
 
-        takeover.style.opacity=1;
-        takeover.style.pointerEvents="auto";
+    "THE SOUND IS COMING FROM YOUR CAMERA.",
 
-        scream();
+    "YOU MISSED HIM.",
 
-        bloodBurst(70);
+    "LOOK AT THE LEFT SIDE OF THE SCREEN.",
 
-        setTimeout(()=>{
-            location.reload();
-        },12000);
+    "HE MOVES WHEN YOU LOOK AWAY.",
 
-    }
-}
+    "WHY IS THE CAMERA GETTING CLOSER?",
 
-/* =====================================================
-   INACTIVITY MESSAGES
-===================================================== */
-
-const messages = [
-
-    "WHY DID YOU STOP?",
-
-    "I DON'T LIKE SILENCE.",
-
-    "HE DOESN'T EITHER.",
-
-    "TURN AROUND.",
-
-    "TOO LATE.",
-
-    "I ALREADY SAW YOU.",
-
-    "HE KNOWS YOU'RE THERE.",
-
-    "DON'T LOOK AWAY.",
-
-    "KEEP MOVING.",
-
-    "THE CAMERA IS NOT THE THING WATCHING YOU.",
-
-    "YOU SHOULD HAVE LEFT.",
-
-    "HE'S CLOSER.",
-
-    "STOP LOOKING AT HIM.",
-
-    "CAMERA 8 IS BEHIND YOU.",
-
-    "WHY ARE YOU STILL HERE?"
+    "SOMETHING IS WATCHING FROM THE HALL."
 
 ];
 
-function messageEvent() {
+
+function showCryptic(){
+
+    cryptic.textContent =
+        creepyMessages[
+            Math.floor(
+                Math.random()*
+                creepyMessages.length
+            )
+        ];
+
+    cryptic.classList.remove(
+        "crypticShow"
+    );
+
+    void cryptic.offsetWidth;
+
+    cryptic.classList.add(
+        "crypticShow"
+    );
+
+    whisper();
+
+}
+
+
+/* =========================================================
+   INACTIVITY LOG
+========================================================= */
+
+function inactivityMessage(){
 
     const panel =
         document.getElementById(
             "messages"
         );
 
-    const m =
-        document.createElement("div");
+    const line =
+        document.createElement(
+            "div"
+        );
 
-    m.className="msg";
+    const mins =
+        Math.floor(
+            idle/60
+        );
 
-    m.innerText =
-        "00:0"+Math.floor(
-            idleSeconds/60
-        )+":"+String(
-            idleSeconds%60
-        ).padStart(2,"0")
-        +" — "+
-        messages[
+    const secs =
+        idle%60;
+
+    line.textContent =
+
+        "00:"+
+        String(mins)
+        .padStart(2,"0")+
+        ":"+
+        String(secs)
+        .padStart(2,"0")+
+        " — "+
+        creepyMessages[
             Math.floor(
-                Math.random()*messages.length
+                Math.random()*
+                creepyMessages.length
             )
         ];
 
-    panel.appendChild(m);
+    panel.appendChild(
+        line
+    );
 
     panel.scrollTop =
         panel.scrollHeight;
@@ -2037,68 +2166,252 @@ function messageEvent() {
 
 }
 
-/* =====================================================
-   WHISPER
-===================================================== */
 
-function whisper() {
+/* =========================================================
+   STAGE SYSTEM
+========================================================= */
 
-    initAudio();
+function updateStage(
+    newStage
+){
 
-    const oscillator =
-        audio.createOscillator();
+    if(
+        newStage<=stage
+    ){
 
-    const gain =
-        audio.createGain();
+        return;
 
-    oscillator.type="triangle";
+    }
 
-    oscillator.frequency.value =
-        70+Math.random()*80;
+    stage =
+        newStage;
 
-    gain.gain.value=.025;
 
-    oscillator.connect(gain);
+    for(
+        let i=1;
+        i<=5;
+        i++
+    ){
 
-    gain.connect(
-        audio.destination
+        const item =
+            document.getElementById(
+                "s"+i
+            );
+
+        if(
+            i<stage
+        ){
+
+            item.className =
+                "stage done";
+
+        }
+
+        else if(
+            i===stage
+        ){
+
+            item.className =
+                "stage now";
+
+        }
+
+        else{
+
+            item.className =
+                "stage";
+
+        }
+
+    }
+
+    signalDrop();
+
+    addLog(
+        "PROGRESSION → STAGE "+
+        stage,
+        true
     );
 
-    oscillator.start();
-
-    oscillator.stop(
-        audio.currentTime+
-        .4+Math.random()*.6
-    );
 }
 
-/* =====================================================
-   RANDOM HORROR
-===================================================== */
 
-function randomHorror() {
+/* =========================================================
+   STAGE EVENTS
+========================================================= */
 
-    const events=[
+function stageEvent(){
 
-        ()=>showEntity(100),
+    if(
+        stage===1
+    ){
 
-        ()=>screenFlash(),
+        drone();
 
-        ()=>corrupt(),
+        if(
+            Math.random()<.5
+        ){
 
-        ()=>demonFlash(),
+            addLog(
+                "AUDIO ANOMALY",
+                true
+            );
 
-        ()=>bloodBurst(😎,
+        }
 
-        ()=>blackoutScreen(500),
+    }
 
-        ()=>staticNoise(),
+
+    else if(
+        stage===2
+    ){
+
+        glitch();
+
+        addLog(
+            "MOTION BEHIND CAMERA",
+            true
+        );
+
+        drone();
+
+        if(
+            Math.random()<.45
+        ){
+
+            showCat(100);
+
+        }
+
+    }
+
+
+    else if(
+        stage===3
+    ){
+
+        flashScreen();
+
+        showCat(
+            80+
+            Math.random()*250
+        );
+
+        demonFlash();
+
+        addLog(
+            "UNKNOWN ENTITY DETECTED",
+            true
+        );
+
+        if(
+            Math.random()<.6
+        ){
+
+            scream();
+
+        }
+
+    }
+
+
+    else if(
+        stage===4
+    ){
+
+        bloodSplatter(
+            25+
+            Math.floor(
+                Math.random()*35
+            )
+        );
+
+        glitch(1200);
+
+        demonFlash();
+
+        flashScreen(
+            "#790000",
+            120
+        );
+
+        addLog(
+            "FEED INTEGRITY: 11%",
+            true
+        );
+
+        scream();
+
+    }
+
+
+    else if(
+        stage===5
+    ){
+
+        takeover.style.display =
+            "flex";
+
+        bloodSplatter(80);
+
+        scream();
+
+        setTimeout(()=>{
+
+            location.reload();
+
+        },15000);
+
+    }
+
+}
+
+
+/* =========================================================
+   RANDOM EVENTS
+========================================================= */
+
+function randomEvent(){
+
+    const events = [
+
+        ()=>{
+            showCat(80);
+        },
+
+        ()=>{
+            flashScreen();
+        },
+
+        ()=>{
+            glitch();
+        },
+
+        ()=>{
+            demonFlash();
+        },
+
+        ()=>{
+            bloodSplatter(10);
+        },
+
+        ()=>{
+            blackoutScreen(500);
+        },
+
+        ()=>{
+            staticSound();
+        },
+
+        ()=>{
+            showCryptic();
+        },
 
         ()=>{
 
-            showEntity(80);
+            flashScreen();
 
-            screenFlash("#fff");
+            showCat(100);
 
         },
 
@@ -2107,16 +2420,21 @@ function randomHorror() {
             blackoutScreen(700);
 
             setTimeout(()=>{
-                showEntity(250);
+
+                showCat(250);
+
                 scream();
+
             },400);
 
         },
 
         ()=>{
 
-            bloodBurst(25);
-            corrupt();
+            bloodSplatter(20);
+
+            glitch();
+
             demonFlash();
 
         }
@@ -2125,225 +2443,384 @@ function randomHorror() {
 
     events[
         Math.floor(
-            Math.random()*events.length
+            Math.random()*
+            events.length
         )
     ]();
 
 }
 
-/* =====================================================
-   TIMER
-===================================================== */
 
-setInterval(()=>{
+/* =========================================================
+   ENTER
+========================================================= */
 
-    idleSeconds++;
+document
+.getElementById("enter")
+.addEventListener(
+    "click",
+    ()=>{
 
-    const minutes =
-        Math.floor(
-            idleSeconds/60
+        document
+        .getElementById("enter")
+        .style.display =
+            "none";
+
+        started =
+            true;
+
+        audioInit();
+
+        drone(2);
+
+        addLog(
+            "VIEWER CONNECTED",
+            true
         );
 
-    const seconds =
-        idleSeconds%60;
+        setTimeout(
+            ()=>showCat(80),
+            3200
+        );
 
-    inactiveTime.innerText =
-        "00:"+
-        String(minutes).padStart(2,"0")+
-        ":"+
-        String(seconds).padStart(2,"0");
-
-    /* progression */
-
-    if(idleSeconds===15) {
-
-        updateStage(2);
-
-        messageEvent();
+        setTimeout(
+            ()=>showCryptic(),
+            5200
+        );
 
     }
+);
 
-    if(idleSeconds===30) {
 
-        updateStage(3);
+/* =========================================================
+   MOUSE ACTIVITY
+========================================================= */
 
-        messageEvent();
+function resetIdle(){
 
-        showEntity(500);
+    idle =
+        0;
 
-    }
+    document
+    .getElementById(
+        "idleTime"
+    )
+    .textContent =
+        "00:00:00";
 
-    if(idleSeconds===45) {
+}
 
-        updateStage(4);
+document.addEventListener(
+    "mousemove",
+    resetIdle
+);
 
-        messageEvent();
+document.addEventListener(
+    "touchstart",
+    resetIdle
+);
 
-        bloodBurst(30);
 
-    }
+/* =========================================================
+   INACTIVITY PROGRESSION
+========================================================= */
 
-    if(idleSeconds===60) {
+setInterval(
+    ()=>{
 
-        messageEvent();
+        if(
+            !started
+        ){
 
-    }
+            return;
 
-    if(idleSeconds===75) {
-
-        updateStage(5);
-
-    }
-
-    /* after one minute */
-
-    if(idleSeconds>60) {
-
-        if(Math.random()<.35) {
-            messageEvent();
         }
 
-        if(Math.random()<.25) {
-            randomHorror();
+        idle++;
+
+
+        const minutes =
+            Math.floor(
+                idle/60
+            );
+
+        const seconds =
+            idle%60;
+
+
+        document
+        .getElementById(
+            "idleTime"
+        )
+        .textContent =
+
+            "00:"+
+            String(minutes)
+            .padStart(2,"0")+
+            ":"+
+            String(seconds)
+            .padStart(2,"0");
+
+
+        /* 10 SEC */
+
+        if(
+            idle===10
+        ){
+
+            inactivityMessage();
+
+            addLog(
+                "VIEWER INACTIVITY DETECTED",
+                true
+            );
+
         }
+
+
+        /* 18 SEC */
+
+        if(
+            idle===18
+        ){
+
+            updateStage(2);
+
+            stageEvent();
+
+        }
+
+
+        /* 30 SEC */
+
+        if(
+            idle===30
+        ){
+
+            inactivityMessage();
+
+            showCryptic();
+
+        }
+
+
+        /* 35 SEC */
+
+        if(
+            idle===35
+        ){
+
+            updateStage(3);
+
+            stageEvent();
+
+        }
+
+
+        /* 48 SEC */
+
+        if(
+            idle===48
+        ){
+
+            inactivityMessage();
+
+            randomEvent();
+
+        }
+
+
+        /* 55 SEC */
+
+        if(
+            idle===55
+        ){
+
+            updateStage(4);
+
+            stageEvent();
+
+        }
+
+
+        /* 70 SEC */
+
+        if(
+            idle===70
+        ){
+
+            inactivityMessage();
+
+            demonFlash();
+
+            bloodSplatter(15);
+
+        }
+
+
+        /* 85 SEC */
+
+        if(
+            idle===85
+        ){
+
+            updateStage(5);
+
+            stageEvent();
+
+        }
+
+
+        /* AFTER 1 MINUTE */
+
+        if(
+            idle>60
+        ){
+
+            if(
+                Math.random()<.35
+            ){
+
+                inactivityMessage();
+
+            }
+
+            if(
+                Math.random()<.28
+            ){
+
+                randomEvent();
+
+            }
+
+        }
+
+    },
+    1000
+);
+
+
+/* =========================================================
+   RANDOM HORROR SCHEDULER
+========================================================= */
+
+function scheduleHorror(){
+
+    if(
+        !started
+    ){
+
+        setTimeout(
+            scheduleHorror,
+            2000
+        );
+
+        return;
 
     }
 
-},1000);
-
-/* =====================================================
-   RANDOM EVENTS
-===================================================== */
-
-function scheduleHorror() {
 
     const delay =
-        3000+
-        Math.random()*9000-
-        stage*500;
+        Math.max(
+            1200,
 
-    setTimeout(()=>{
+            7000 -
+            stage*900 +
 
-        randomHorror();
+            Math.random()*8000
+        );
 
-        scheduleHorror();
 
-    },Math.max(1500,delay));
+    setTimeout(
+        ()=>{
+
+            if(
+                Math.random()<.82
+            ){
+
+                randomEvent();
+
+            }
+
+            scheduleHorror();
+
+        },
+        delay
+    );
 
 }
 
 scheduleHorror();
 
-/* =====================================================
-   MOUSE ACTIVITY
-===================================================== */
 
-document.addEventListener(
-    "mousemove",
-    ()=>{
-
-        lastMovement =
-            Date.now();
-
-        idleSeconds=0;
-
-        inactiveTime.innerText=
-            "00:00:00";
-
-    }
-);
-
-/* =====================================================
-   CLICK
-===================================================== */
-
-document.addEventListener(
-    "click",
-    ()=>{
-
-        initAudio();
-
-        drone(.5);
-
-        if(Math.random()<.15) {
-
-            screenFlash();
-
-            scream();
-
-            showEntity(100);
-
-        }
-
-    }
-);
-
-/* =====================================================
+/* =========================================================
    CLOCK
-===================================================== */
-
-function updateClock() {
-
-    const now =
-        new Date();
-
-    document.getElementById(
-        "time"
-    ).innerText =
-        now.toLocaleTimeString();
-
-    document.getElementById(
-        "date"
-    ).innerText =
-        now.toLocaleDateString();
-
-}
+========================================================= */
 
 setInterval(
-    updateClock,
+    ()=>{
+
+        const now =
+            new Date();
+
+        document
+        .getElementById(
+            "clock"
+        )
+        .textContent =
+            now.toLocaleTimeString();
+
+        document
+        .getElementById(
+            "date"
+        )
+        .textContent =
+            now.toLocaleDateString();
+
+    },
     1000
 );
 
-updateClock();
 
-/* =====================================================
-   INITIAL EVENT
-===================================================== */
+/* =========================================================
+   INITIAL LOGS
+========================================================= */
 
-setTimeout(()=>{
+setTimeout(
+    ()=>{
 
-    addLog(
-        "VIEWER CONNECTED",
-        true
-    );
+        addLog(
+            "SIGNAL SOURCE: UNKNOWN",
+            true
+        );
 
-},1000);
+    },
+    7000
+);
 
-setTimeout(()=>{
+setTimeout(
+    ()=>{
 
-    addLog(
-        "MOTION DETECTED",
-        true
-    );
+        addLog(
+            "ENTITY CLASSIFICATION FAILED",
+            true
+        );
 
-},4000);
+    },
+    11000
+);
 
-setTimeout(()=>{
+setTimeout(
+    ()=>{
 
-    screenFlash();
+        addLog(
+            "IT IS LOOKING AT THE VIEWER",
+            true
+        );
 
-    showEntity(70);
-
-},6500);
-
-setTimeout(()=>{
-
-    addLog(
-        "IT KNOWS YOU ARE WATCHING",
-        true
-    );
-
-},9000);
+    },
+    16000
+);
 
 </script>
 

@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NO ONE KNOWS</title>
+
+<title>CAM_01 // SIGNAL LOST</title>
 
 <style>
 * {
@@ -15,269 +16,361 @@ html, body {
     width: 100%;
     height: 100%;
     background: #000;
-    color: #ddd;
+    overflow: hidden;
     font-family: "Courier New", monospace;
+    color: #ddd;
+}
+
+#camera {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at center,
+        rgba(70,70,70,.16),
+        rgba(0,0,0,.95) 75%),
+        #050505;
     overflow: hidden;
 }
 
-body {
-    position: relative;
-}
+/* CRT scanlines */
 
-/* CRT SCANLINES */
-body::before {
+#camera::before {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 50;
+    z-index: 20;
+
     background:
         repeating-linear-gradient(
-            0deg,
-            rgba(255,255,255,0.025) 0px,
-            rgba(255,255,255,0.025) 1px,
+            to bottom,
+            rgba(255,255,255,.035) 0px,
+            rgba(255,255,255,.035) 1px,
             transparent 2px,
-            transparent 5px
+            transparent 4px
         );
 }
 
-/* SCREEN NOISE */
-.noise {
-    position: fixed;
-    inset: -100%;
+/* Static */
+
+#static {
+    position: absolute;
+    inset: 0;
+    opacity: .08;
     pointer-events: none;
-    z-index: 49;
-    opacity: 0.07;
+    z-index: 18;
+
     background-image:
         repeating-radial-gradient(
             circle at 20% 30%,
             #fff 0,
             #fff 1px,
-            transparent 1px,
-            transparent 3px
+            transparent 2px,
+            transparent 4px
         );
-    animation: noise 0.18s steps(2) infinite;
+
+    animation: staticMove .12s infinite;
 }
 
-@keyframes noise {
-    0%   { transform: translate(0,0); }
-    25%  { transform: translate(3%, -2%); }
-    50%  { transform: translate(-2%, 3%); }
-    75%  { transform: translate(2%, 2%); }
-    100% { transform: translate(-3%, -3%); }
+@keyframes staticMove {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(-3px,2px); }
+    50% { transform: translate(2px,-2px); }
+    75% { transform: translate(-2px,-3px); }
+    100% { transform: translate(0,0); }
 }
 
-/* MAIN SCREEN */
-.screen {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    background:
-        radial-gradient(
-            ellipse at center,
-            #111 0%,
-            #050505 45%,
-            #000 100%
-        );
-}
+/* Camera HUD */
 
-/* CREEPY CAT */
-.cat {
+#hud {
     position: absolute;
-    width: 260px;
-    height: 340px;
-    right: 8%;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.16;
-    filter: blur(1px);
+    inset: 0;
+    z-index: 25;
+    pointer-events: none;
 }
 
-.head {
+#rec {
     position: absolute;
-    width: 190px;
-    height: 210px;
-    left: 35px;
-    top: 65px;
-    background: #ddd;
-    border-radius: 48% 48% 45% 45%;
-}
-
-/* ears */
-.ear-left,
-.ear-right {
-    position: absolute;
-    top: 20px;
-    width: 90px;
-    height: 120px;
-    background: #ddd;
-}
-
-.ear-left {
+    top: 25px;
     left: 30px;
-    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    font-size: 18px;
+    color: #ff3333;
+    text-shadow: 0 0 10px red;
 }
 
-.ear-right {
-    right: 30px;
-    clip-path: polygon(0 100%, 50% 0, 100% 100%);
-}
-
-/* eyes */
-.eye {
-    position: absolute;
-    top: 135px;
-    width: 23px;
-    height: 48px;
-    background: #000;
-    border-radius: 50%;
-}
-
-.eye-left {
-    left: 78px;
-}
-
-.eye-right {
-    right: 78px;
-}
-
-.eye::after {
+#rec::before {
     content: "";
-    position: absolute;
-    width: 4px;
-    height: 30px;
-    background: #777;
-    left: 9px;
-    top: 9px;
-}
-
-/* mouth */
-.mouth {
-    position: absolute;
-    width: 65px;
-    height: 35px;
-    left: 62px;
-    top: 195px;
-    border-bottom: 4px solid #000;
-    border-radius: 0 0 50% 50%;
-}
-
-/* HAT */
-.hat {
-    position: absolute;
-    width: 100px;
-    height: 125px;
-    background: #ddd;
-    left: 80px;
-    top: -35px;
-    transform: rotate(-5deg);
-    z-index: 3;
-}
-
-.hat::before {
-    content: "";
-    position: absolute;
-    width: 145px;
-    height: 25px;
-    background: #ddd;
-    left: -22px;
-    bottom: -10px;
-}
-
-.hat::after {
-    content: "";
-    position: absolute;
-    width: 100px;
-    height: 25px;
-    background: #800000;
-    top: 55px;
-}
-
-/* TERMINAL */
-.terminal {
-    width: min(800px, 88vw);
-    min-height: 520px;
-    padding: 40px;
-    border: 1px solid #222;
-    background: rgba(0,0,0,0.88);
-    box-shadow:
-        0 0 50px #000,
-        inset 0 0 80px rgba(255,255,255,0.015);
-    position: relative;
-    z-index: 5;
-}
-
-.header {
-    color: #555;
-    font-size: 12px;
-    margin-bottom: 35px;
-}
-
-.line {
-    line-height: 1.8;
-    font-size: 14px;
-}
-
-.red {
-    color: #8b0000;
-}
-
-.title {
-    text-align: center;
-    font-size: clamp(32px, 7vw, 75px);
-    letter-spacing: 8px;
-    margin: 45px 0;
-    color: #ddd;
-}
-
-.message {
-    min-height: 80px;
-    font-size: 17px;
-    line-height: 1.7;
-}
-
-.cursor {
     display: inline-block;
-    width: 9px;
-    height: 18px;
-    background: #aaa;
-    animation: blink 0.8s infinite;
+    width: 10px;
+    height: 10px;
+    background: red;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: blink .8s infinite;
 }
 
 @keyframes blink {
-    50% {
+    50% { opacity: .1; }
+}
+
+#cameraName {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    font-size: 15px;
+}
+
+#timestamp {
+    position: absolute;
+    bottom: 25px;
+    left: 30px;
+}
+
+#warning {
+    position: absolute;
+    bottom: 25px;
+    right: 30px;
+    color: #888;
+}
+
+/* Vignette */
+
+#vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 19;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 35%,
+            rgba(0,0,0,.55) 80%,
+            rgba(0,0,0,.95)
+        );
+}
+
+/* Cat */
+
+#cat {
+    position: absolute;
+    width: 230px;
+    height: 330px;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(.85);
+
+    opacity: 0;
+
+    transition:
+        opacity .08s,
+        transform .08s;
+
+    z-index: 10;
+
+    filter:
+        drop-shadow(0 0 15px rgba(255,0,0,.3));
+}
+
+.cat-head {
+    position: absolute;
+    width: 170px;
+    height: 145px;
+
+    left: 30px;
+    top: 45px;
+
+    background: #020202;
+
+    border-radius:
+        48% 48% 45% 45%;
+}
+
+.ear {
+    position: absolute;
+    width: 70px;
+    height: 100px;
+
+    background: #020202;
+    top: -55px;
+}
+
+.ear.left {
+    left: 3px;
+    transform: rotate(-25deg);
+    clip-path: polygon(0 100%, 40% 0, 100% 100%);
+}
+
+.ear.right {
+    right: 3px;
+    transform: rotate(25deg);
+    clip-path: polygon(0 100%, 60% 0, 100% 100%);
+}
+
+.eye {
+    position: absolute;
+
+    width: 17px;
+    height: 32px;
+
+    background: #d90000;
+    border-radius: 50%;
+
+    top: 65px;
+
+    box-shadow:
+        0 0 12px red,
+        0 0 25px rgba(255,0,0,.7);
+}
+
+.eye.left {
+    left: 42px;
+}
+
+.eye.right {
+    right: 42px;
+}
+
+.mouth {
+    position: absolute;
+
+    left: 52px;
+    top: 103px;
+
+    width: 66px;
+    height: 28px;
+
+    border-bottom:
+        5px solid #b00000;
+
+    border-radius: 0 0 50% 50%;
+}
+
+.body {
+    position: absolute;
+
+    width: 135px;
+    height: 180px;
+
+    left: 47px;
+    top: 170px;
+
+    background: #020202;
+
+    border-radius:
+        50% 50% 15% 15%;
+}
+
+/* Hat */
+
+.hat {
+    position: absolute;
+
+    width: 120px;
+    height: 210px;
+
+    left: 55px;
+    top: -100px;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #850000 0px,
+            #850000 35px,
+            #050505 35px,
+            #050505 65px
+        );
+
+    clip-path:
+        polygon(
+            35% 100%,
+            50% 0,
+            65% 100%
+        );
+
+    transform: rotate(-5deg);
+}
+
+/* Blood */
+
+.blood {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+
+    background: #750000;
+
+    border-radius: 50%;
+
+    opacity: 0;
+
+    z-index: 17;
+
+    box-shadow:
+        0 0 8px rgba(150,0,0,.6);
+}
+
+.blood.big {
+    width: 80px;
+    height: 80px;
+}
+
+@keyframes bloodFlash {
+    0% {
         opacity: 0;
+        transform: scale(.2);
+    }
+
+    15% {
+        opacity: .95;
+    }
+
+    100% {
+        opacity: .65;
+        transform: scale(1.2);
     }
 }
 
-/* BUTTONS */
-.buttons {
-    margin-top: 30px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+/* Demonic symbols */
+
+#symbol {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    font-size: 180px;
+
+    color: #8b0000;
+
+    text-shadow:
+        0 0 10px red,
+        0 0 40px red;
+
+    opacity: 0;
+
+    z-index: 16;
+
+    pointer-events: none;
 }
 
-button {
-    background: #050505;
-    color: #888;
-    border: 1px solid #444;
-    padding: 12px 18px;
-    font-family: "Courier New", monospace;
-    cursor: pointer;
+@keyframes symbolFlash {
+    0% { opacity: 0; transform: translate(-50%,-50%) scale(.3) rotate(-20deg); }
+    30% { opacity: .9; }
+    60% { opacity: .5; }
+    100% { opacity: 0; transform: translate(-50%,-50%) scale(1.3) rotate(20deg); }
 }
 
-button:hover {
-    color: white;
-    border-color: #aaa;
-}
+/* Glitch */
 
-/* GLITCH */
 .glitch {
-    animation: glitch 0.12s steps(2) 6;
+    animation: glitch .12s infinite;
 }
 
 @keyframes glitch {
@@ -287,22 +380,21 @@ button:hover {
     }
 
     20% {
-        transform: translate(-12px, 4px);
-        filter: contrast(2);
+        transform: translate(-8px, 3px);
+        filter: hue-rotate(90deg);
     }
 
     40% {
-        transform: translate(10px, -3px);
-        filter: invert(1);
+        transform: translate(7px,-4px);
     }
 
     60% {
-        transform: translate(-7px, 2px);
-        filter: contrast(3);
+        transform: translate(-4px,5px);
+        filter: contrast(2);
     }
 
     80% {
-        transform: translate(5px, -2px);
+        transform: translate(5px,-2px);
     }
 
     100% {
@@ -310,449 +402,860 @@ button:hover {
     }
 }
 
-/* FLASH */
-.flash {
+/* Flash */
+
+#flash {
     position: fixed;
     inset: 0;
+
     background: white;
+
     opacity: 0;
+
     pointer-events: none;
+
     z-index: 100;
 }
 
-/* RED FLASH */
-.redFlash {
+/* Blackout */
+
+#blackout {
     position: fixed;
     inset: 0;
-    background: #700000;
+
+    background: #000;
+
     opacity: 0;
+
     pointer-events: none;
+
     z-index: 99;
 }
 
-/* HIDDEN MESSAGE */
-.secret {
-    color: #333;
-    font-size: 11px;
-    margin-top: 25px;
+/* Messages */
+
+#message {
+    position: absolute;
+
+    left: 50%;
+    top: 70%;
+
+    transform: translate(-50%,-50%);
+
+    width: 90%;
+
+    text-align: center;
+
+    font-size: 20px;
+
+    color: #777;
+
+    opacity: 0;
+
+    z-index: 40;
+
+    text-shadow:
+        0 0 5px #000;
 }
 
-.warning {
-    color: #4d0000;
-    font-size: 11px;
-    margin-top: 30px;
+@keyframes messageAppear {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-    }
+/* Camera error */
+
+#error {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    color: #aaa;
+
+    font-size: 24px;
+
+    opacity: 0;
+
+    z-index: 50;
+
+    text-align: center;
 }
+
+/* Mouse presence */
+
+#presence {
+    position: absolute;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: rgba(255,0,0,.7);
+
+    box-shadow: 0 0 15px red;
+
+    pointer-events: none;
+
+    z-index: 35;
+
+    opacity: .15;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="noise"></div>
-<div class="flash" id="flash"></div>
-<div class="redFlash" id="redFlash"></div>
+<div id="camera">
 
-<div class="screen">
+    <div id="static"></div>
 
-    <div class="cat">
+    <div id="hud">
+        <div id="rec">REC</div>
+        <div id="cameraName">CAM_01 // HALLWAY</div>
+
+        <div id="timestamp">
+            03:17:██:██
+        </div>
+
+        <div id="warning">
+            SIGNAL: UNSTABLE
+        </div>
+    </div>
+
+    <div id="cat">
+
         <div class="hat"></div>
-        <div class="ear-left"></div>
-        <div class="ear-right"></div>
-        <div class="head"></div>
-        <div class="eye eye-left"></div>
-        <div class="eye eye-right"></div>
-        <div class="mouth"></div>
+
+        <div class="cat-head">
+
+            <div class="ear left"></div>
+            <div class="ear right"></div>
+
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+
+            <div class="mouth"></div>
+
+        </div>
+
+        <div class="body"></div>
+
     </div>
 
-    <div class="terminal" id="terminal">
+    <div id="symbol">⛧</div>
 
-        <div class="header">
-            ARCHIVE NODE: UNKNOWN<br>
-            CONNECTION: UNSTABLE<br>
-            TIME: <span id="time"></span>
-        </div>
+    <div id="message"></div>
 
-        <div class="line">
-            &gt; initializing...
-        </div>
-
-        <div class="line">
-            &gt; checking archive integrity...
-        </div>
-
-        <div class="line red">
-            &gt; WARNING: UNKNOWN PRESENCE DETECTED
-        </div>
-
-        <div class="title" id="title">
-            NO ONE KNOWS
-        </div>
-
-        <div class="message" id="message">
-        </div>
-
-        <span class="cursor"></span>
-
-        <div class="buttons">
-
-            <button onclick="startRecord()">
-                OPEN RECORD
-            </button>
-
-            <button onclick="startAudio()">
-                LISTEN
-            </button>
-
-            <button onclick="nextClue()">
-                NEXT CLUE
-            </button>
-
-        </div>
-
-        <div class="secret" id="secret">
-            RECORD 00 // NOTHING WAS FOUND.
-        </div>
-
-        <div class="warning">
-            DO NOT ANSWER THE KNOCK.
-        </div>
-
+    <div id="error">
+        <div>CAMERA ERROR</div>
+        <br>
+        <small>UNAUTHORIZED MOVEMENT DETECTED</small>
     </div>
+
+    <div id="flash"></div>
+    <div id="blackout"></div>
+
+    <div id="vignette"></div>
+
+    <div id="presence"></div>
 
 </div>
 
 <script>
 
-/* CLOCK */
+/* =========================================================
+   HORROR CAMERA ENGINE
+========================================================= */
 
-function updateTime() {
+let inactivity = 0;
+let intensity = 1;
+let lastMouse = Date.now();
 
-    const now = new Date();
+const camera = document.getElementById("camera");
+const cat = document.getElementById("cat");
+const flash = document.getElementById("flash");
+const blackout = document.getElementById("blackout");
+const symbol = document.getElementById("symbol");
+const message = document.getElementById("message");
+const errorBox = document.getElementById("error");
+const presence = document.getElementById("presence");
 
-    document.getElementById("time").textContent =
-        now.toLocaleTimeString();
+/* =========================================================
+   AUDIO ENGINE
+   Generates creepy sounds without external files.
+========================================================= */
 
+let audioContext;
+
+function audioInit() {
+
+    if (!audioContext) {
+        audioContext =
+            new (window.AudioContext ||
+            window.webkitAudioContext)();
+    }
 }
 
-setInterval(updateTime, 1000);
-updateTime();
+/* Low distorted drone */
 
+function drone(duration = 2) {
 
-/* ARG MESSAGES */
+    audioInit();
 
-const messages = [
+    const osc =
+        audioContext.createOscillator();
 
-    "someone opened this archive before you.",
+    const gain =
+        audioContext.createGain();
 
-    "the first photograph has been deleted.",
+    const distortion =
+        audioContext.createWaveShaper();
 
-    "the Cat was not supposed to appear here.",
+    osc.type = "sawtooth";
 
-    "three knocks were recorded at 03:17.",
+    osc.frequency.value =
+        55 + Math.random() * 35;
 
-    "nobody remembers opening the door.",
+    gain.gain.setValueAtTime(
+        .0001,
+        audioContext.currentTime
+    );
 
-    "the person who found this page disappeared.",
+    gain.gain.exponentialRampToValueAtTime(
+        .12,
+        audioContext.currentTime + .15
+    );
 
-    "there is something standing behind the camera.",
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        audioContext.currentTime + duration
+    );
 
-    "the hat moved between photographs.",
+    osc.connect(distortion);
+    distortion.connect(gain);
+    gain.connect(audioContext.destination);
 
-    "you were not supposed to reach record 08.",
+    osc.start();
+    osc.stop(audioContext.currentTime + duration);
+}
 
-    "DO NOT LOOK BEHIND YOU."
+/* High-pitched digital scream */
 
-];
+function scream() {
 
-let record = 0;
+    audioInit();
 
-function typeText(text) {
+    const osc =
+        audioContext.createOscillator();
 
-    const box = document.getElementById("message");
+    const gain =
+        audioContext.createGain();
 
-    box.textContent = "";
+    osc.type = "square";
 
-    let i = 0;
+    osc.frequency.setValueAtTime(
+        180,
+        audioContext.currentTime
+    );
 
-    const timer = setInterval(() => {
+    osc.frequency.exponentialRampToValueAtTime(
+        1600,
+        audioContext.currentTime + .45
+    );
 
-        box.textContent += text[i];
+    gain.gain.setValueAtTime(
+        .0001,
+        audioContext.currentTime
+    );
 
-        i++;
+    gain.gain.exponentialRampToValueAtTime(
+        .15,
+        audioContext.currentTime + .05
+    );
 
-        if (i >= text.length) {
-            clearInterval(timer);
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        audioContext.currentTime + .7
+    );
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    osc.start();
+    osc.stop(audioContext.currentTime + .75);
+}
+
+/* Whisper-like noise */
+
+function whisper() {
+
+    audioInit();
+
+    const buffer =
+        audioContext.createBuffer(
+            1,
+            audioContext.sampleRate * .8,
+            audioContext.sampleRate
+        );
+
+    const data =
+        buffer.getChannelData(0);
+
+    for (let i = 0; i < data.length; i++) {
+
+        data[i] =
+            (Math.random() * 2 - 1)
+            *
+            Math.sin(i / 30)
+            *
+            .3;
+    }
+
+    const source =
+        audioContext.createBufferSource();
+
+    const gain =
+        audioContext.createGain();
+
+    source.buffer = buffer;
+
+    gain.gain.value = .08;
+
+    source.connect(gain);
+    gain.connect(audioContext.destination);
+
+    source.start();
+}
+
+/* =========================================================
+   FLASH
+========================================================= */
+
+function flashScreen(strength = 1) {
+
+    flash.style.background =
+        Math.random() > .7
+        ? "#ff0000"
+        : "#ffffff";
+
+    flash.style.opacity = strength;
+
+    setTimeout(() => {
+
+        flash.style.opacity = 0;
+
+    }, 40 + Math.random() * 100);
+}
+
+/* =========================================================
+   BLACKOUT
+========================================================= */
+
+function blackoutScreen() {
+
+    blackout.style.opacity = 1;
+
+    setTimeout(() => {
+
+        blackout.style.opacity = 0;
+
+    }, 500 + Math.random() * 1800);
+}
+
+/* =========================================================
+   CAT APPEARANCE
+========================================================= */
+
+function revealCat(duration = 600) {
+
+    cat.style.opacity = 1;
+
+    cat.style.transform =
+        `
+        translate(-50%, -50%)
+        scale(${.7 + Math.random() * .7})
+        rotate(${Math.random() * 8 - 4}deg)
+        `;
+
+    setTimeout(() => {
+
+        cat.style.opacity = 0;
+
+    }, duration);
+}
+
+/* =========================================================
+   BLOOD SPLATTER
+========================================================= */
+
+function bloodSplatter() {
+
+    for (let i = 0; i < 35; i++) {
+
+        const drop =
+            document.createElement("div");
+
+        drop.className = "blood";
+
+        if (Math.random() > .92) {
+            drop.classList.add("big");
         }
 
-    }, 40);
+        drop.style.left =
+            Math.random() * 100 + "%";
 
+        drop.style.top =
+            Math.random() * 100 + "%";
+
+        drop.style.animation =
+            `
+            bloodFlash
+            ${.15 + Math.random() * .4}s
+            forwards
+            `;
+
+        camera.appendChild(drop);
+
+        setTimeout(() => {
+            drop.remove();
+        }, 4000);
+    }
 }
 
+/* =========================================================
+   DEMON SYMBOL
+========================================================= */
 
-function startRecord() {
+function demonSymbol() {
 
-    record++;
+    const symbols = [
+        "⛧",
+        "☠",
+        "666",
+        "†",
+        "☽",
+        "⸸",
+        "👁"
+    ];
 
-    if (record >= messages.length) {
-        record = 0;
-    }
+    symbol.innerText =
+        symbols[
+            Math.floor(
+                Math.random() * symbols.length
+            )
+        ];
 
-    typeText(messages[record]);
+    symbol.style.animation =
+        "none";
 
-    document.getElementById("secret").textContent =
-        "RECORD " +
-        String(record).padStart(2,"0") +
-        " // ARCHIVE CORRUPTED";
+    void symbol.offsetWidth;
 
-    if (record === 3 || record === 7 || record === 9) {
-        glitch();
-    }
-
+    symbol.style.animation =
+        "symbolFlash .8s forwards";
 }
 
-
-/* CLUES */
-
-const clues = [
-
-    "CLUE 01 // THE CLOCK STOPPED AT 03:17.",
-
-    "CLUE 02 // FOUR FINGERPRINTS. NO HANDPRINT.",
-
-    "CLUE 03 // THE HAT WAS FOUND FACING THE WALL.",
-
-    "CLUE 04 // SOMEONE WROTE: HE IS NOT IN THE PICTURE.",
-
-    "CLUE 05 // THE DOOR WAS LOCKED FROM THE INSIDE.",
-
-    "CLUE 06 // THERE WAS A SECOND SHADOW.",
-
-    "CLUE 07 // THE CAT KNOWS YOUR NAME.",
-
-    "CLUE 08 // DON'T MAKE HIM LAUGH."
-
-];
-
-let clue = 0;
-
-function nextClue() {
-
-    clue++;
-
-    if (clue >= clues.length) {
-        clue = 0;
-    }
-
-    document.getElementById("secret").textContent =
-        clues[clue];
-
-    if (clue === 6 || clue === 7) {
-        glitch();
-    }
-
-}
-
-
-/* SCREEN GLITCH */
+/* =========================================================
+   GLITCH EVENT
+========================================================= */
 
 function glitch() {
 
-    const terminal =
-        document.getElementById("terminal");
-
-    terminal.classList.add("glitch");
+    camera.classList.add("glitch");
 
     setTimeout(() => {
 
-        terminal.classList.remove("glitch");
+        camera.classList.remove("glitch");
 
-    }, 900);
-
+    }, 150 + Math.random() * 500);
 }
 
+/* =========================================================
+   FAKE CAMERA ERROR
+========================================================= */
 
-/* CONTROLLED FLASH */
+function cameraError() {
 
-function flashScreen() {
-
-    const flash =
-        document.getElementById("flash");
-
-    flash.style.opacity = "0.85";
+    errorBox.style.opacity = 1;
 
     setTimeout(() => {
-        flash.style.opacity = "0";
-    }, 80);
 
+        errorBox.style.opacity = 0;
+
+    }, 700 + Math.random() * 1500);
 }
 
+/* =========================================================
+   DISTURBING MESSAGES
+========================================================= */
 
-/* RED FLASH */
+const messages = [
 
-function redFlashScreen() {
+    "WHY DID YOU STOP MOVING?",
 
-    const flash =
-        document.getElementById("redFlash");
+    "I CAN SEE YOU.",
 
-    flash.style.opacity = "0.45";
+    "THE CAMERA IS NOT RECORDING THE ROOM.",
 
-    setTimeout(() => {
-        flash.style.opacity = "0";
-    }, 120);
+    "DON'T LOOK BEHIND YOU.",
 
+    "HE KNOWS YOU ARE STILL THERE.",
+
+    "YOU'VE BEEN HERE FOR TOO LONG.",
+
+    "CAM_01 HAS A SECOND VIEW.",
+
+    "THAT WASN'T THERE BEFORE.",
+
+    "PLEASE KEEP YOUR EYES OPEN.",
+
+    "MOVEMENT DETECTED BEHIND CAMERA.",
+
+    "DO NOT TURN AROUND.",
+
+    "SIGNAL SOURCE: UNKNOWN",
+
+    "HE IS CLOSER NOW.",
+
+    "WHY ARE YOU STILL WATCHING?",
+
+    "I SAW YOU BLINK.",
+
+    "CAMERA 02 IS WATCHING YOU.",
+
+    "THERE IS SOMETHING IN THE HALLWAY.",
+
+    "IT DOESN'T LIKE BEING IGNORED.",
+
+    "DON'T LET HIM SEE YOU.",
+
+    "███ YOU SHOULD LEAVE ███"
+
+];
+
+function creepyMessage() {
+
+    const text =
+        messages[
+            Math.floor(
+                Math.random() * messages.length
+            )
+        ];
+
+    message.innerText = text;
+
+    message.style.animation =
+        "none";
+
+    void message.offsetWidth;
+
+    message.style.animation =
+        "messageAppear 4s forwards";
+
+    whisper();
 }
 
+/* =========================================================
+   RANDOM HORROR EVENT
+========================================================= */
 
-/* RANDOM DISTORTION */
+function horrorEvent() {
+
+    const events = [
+
+        () => revealCat(300 + intensity * 150),
+
+        () => flashScreen(1),
+
+        () => glitch(),
+
+        () => bloodSplatter(),
+
+        () => demonSymbol(),
+
+        () => cameraError(),
+
+        () => blackoutScreen(),
+
+        () => {
+
+            revealCat(900);
+
+            flashScreen(.7);
+
+            scream();
+
+        },
+
+        () => {
+
+            demonSymbol();
+
+            bloodSplatter();
+
+            glitch();
+
+        },
+
+        () => {
+
+            blackoutScreen();
+
+            setTimeout(() => {
+
+                revealCat(700);
+
+                scream();
+
+            }, 600);
+
+        }
+
+    ];
+
+    const event =
+        events[
+            Math.floor(
+                Math.random() * events.length
+            )
+        ];
+
+    event();
+}
+
+/* =========================================================
+   INACTIVITY SYSTEM
+========================================================= */
 
 setInterval(() => {
 
-    if (Math.random() < 0.28) {
+    inactivity++;
+
+    /*
+       Every 10 seconds the page becomes
+       increasingly unpredictable.
+    */
+
+    if (inactivity > 10) {
+
+        intensity =
+            Math.min(
+                10,
+                1 + Math.floor(inactivity / 10)
+            );
+
+    }
+
+    /*
+       First stage
+    */
+
+    if (inactivity === 😎 {
+
+        creepyMessage();
+
+    }
+
+    /*
+       Second stage
+    */
+
+    if (inactivity === 15) {
+
+        revealCat(800);
+
+        drone();
+
+    }
+
+    /*
+       Third stage
+    */
+
+    if (inactivity === 22) {
 
         glitch();
 
+        creepyMessage();
+
     }
 
-}, 5000);
+    /*
+       Fourth stage
+    */
 
+    if (inactivity > 25) {
 
-/* RANDOM FLASH */
+        const chance =
+            Math.min(
+                .75,
+                .15 + intensity * .06
+            );
+
+        if (Math.random() < chance) {
+
+            horrorEvent();
+
+        }
+    }
+
+}, 1000);
+
+/* =========================================================
+   RANDOM EVENTS EVEN WHILE ACTIVE
+========================================================= */
+
+function scheduleRandomEvent() {
+
+    const delay =
+        Math.max(
+            1800,
+            9000 - intensity * 600
+        )
+        +
+        Math.random() * 7000;
+
+    setTimeout(() => {
+
+        if (Math.random() < .7) {
+
+            horrorEvent();
+
+        }
+
+        scheduleRandomEvent();
+
+    }, delay);
+}
+
+scheduleRandomEvent();
+
+/* =========================================================
+   MOUSE TRACKING
+========================================================= */
+
+document.addEventListener("mousemove", e => {
+
+    inactivity = 0;
+    lastMouse = Date.now();
+
+    presence.style.left =
+        e.clientX + "px";
+
+    presence.style.top =
+        e.clientY + "px";
+
+});
+
+/* =========================================================
+   CLICK
+========================================================= */
+
+document.addEventListener("click", () => {
+
+    audioInit();
+
+    /*
+       First click unlocks browser audio.
+    */
+
+    if (Math.random() < .45) {
+
+        drone(.7);
+
+    }
+
+    if (Math.random() < .15) {
+
+        scream();
+
+        revealCat(500);
+
+    }
+
+});
+
+/* =========================================================
+   FAKE TIMESTAMP
+========================================================= */
 
 setInterval(() => {
 
-    if (Math.random() < 0.10) {
+    const now = new Date();
 
-        flashScreen();
+    const h =
+        String(now.getHours())
+        .padStart(2,"0");
 
-    }
+    const m =
+        String(now.getMinutes())
+        .padStart(2,"0");
 
-}, 7000);
+    const s =
+        String(now.getSeconds())
+        .padStart(2,"0");
 
+    document.getElementById(
+        "timestamp"
+    ).innerText =
+        ${h}:${m}:${s} // FRAME_${Math.floor(Math.random()*9999)};
 
-/* AUDIO */
+}, 1000);
 
-let audioStarted = false;
-let audioContext;
-let oscillator;
-let gain;
-
-function startAudio() {
-
-    if (audioStarted) {
-        return;
-    }
-
-    audioStarted = true;
-
-    audioContext =
-        new (window.AudioContext ||
-        window.webkitAudioContext)();
-
-    oscillator =
-        audioContext.createOscillator();
-
-    gain =
-        audioContext.createGain();
-
-    oscillator.type = "sine";
-
-    oscillator.frequency.value = 43;
-
-    gain.gain.value = 0.025;
-
-    oscillator.connect(gain);
-
-    gain.connect(audioContext.destination);
-
-    oscillator.start();
-
-    document.querySelector(
-        ".buttons button:nth-child(2)"
-    ).textContent = "AUDIO ACTIVE";
-
-    document.querySelector(
-        ".header"
-    ).innerHTML +=
-        "<br><span class='red'>AUDIO CHANNEL OPEN</span>";
-
-}
-
-
-/* IDLE BEHAVIOR */
-
-let idleTimer;
-
-function resetIdle() {
-
-    clearTimeout(idleTimer);
-
-    idleTimer = setTimeout(() => {
-
-        typeText(
-            "...you left the window open."
-        );
-
-        glitch();
-
-        setTimeout(() => {
-            redFlashScreen();
-        }, 1400);
-
-    }, 20000);
-
-}
-
-document.addEventListener(
-    "mousemove",
-    resetIdle
-);
-
-document.addEventListener(
-    "keydown",
-    resetIdle
-);
-
-document.addEventListener(
-    "click",
-    resetIdle
-);
-
-resetIdle();
-
-
-/* RANDOM TEXT CORRUPTION */
+/* =========================================================
+   PERIODIC RANDOM SYMBOL GLITCH
+========================================================= */
 
 setInterval(() => {
 
-    const title =
-        document.getElementById("title");
+    if (Math.random() < .25) {
 
-    if (Math.random() < 0.08) {
-
-        const original =
-            title.textContent;
-
-        title.textContent =
-            "THE CAT IS HERE";
-
-        setTimeout(() => {
-
-            title.textContent =
-                original;
-
-        }, 500);
+        demonSymbol();
 
     }
 
-}, 3000);
+}, 12000);
+
+/* =========================================================
+   OCCASIONAL EYE MOVEMENT
+========================================================= */
+
+setInterval(() => {
+
+    if (cat.style.opacity !== "0") {
+
+        const eyes =
+            document.querySelectorAll(".eye");
+
+        eyes.forEach(eye => {
+
+            eye.style.transform =
+                `translate(
+                    ${(Math.random() * 8 - 4)}px,
+                    ${(Math.random() * 5 - 2.5)}px
+                )`;
+
+        });
+
+    }
+
+}, 300);
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+setTimeout(() => {
+
+    creepyMessage();
+
+}, 3500);
 
 </script>
 
